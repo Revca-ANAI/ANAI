@@ -29,7 +29,7 @@ Our Goal is to democratize Machine Learning and make it accessible to everyone.
 
 1) Classification
 
-    Available Models for Classification
+       Available Models for Classification
 
         - "lr": "Logistic Regression"
         - "sgd": "Stochastic Gradient Descent"
