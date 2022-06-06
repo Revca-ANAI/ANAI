@@ -31,48 +31,63 @@ Our Goal is to democratize Machine Learning and make it accessible to everyone.
 
     Available Models for Classification
 
-        - 'lr'  : 'Logistic Regression',
-        - 'sgd' : 'Stochastic Gradient Descent',
-        - 'perc': 'Perceptron',
-        - 'pass': 'Passive Aggressive Classifier',
-        - 'ridg': 'Ridge Classifier', 
-        - 'svm' : 'Support Vector Machine',
-        - 'knn' : 'K-Nearest Neighbours',
-        - 'dt'  : 'Decision Trees',
-        - 'nb'  : 'Naive Bayes',
-        - 'rfc' : 'Random Forest Classifier',
-        - 'gbc' : 'Gradient Boosting Classifier',
-        - 'ada' : 'AdaBoost Classifier',
-        - 'bag' : 'Bagging Classifier',
-        - 'extc': 'Extra Trees Classifier',
-        - 'lgbm': 'LightGBM Classifier',
-        - 'cat' : 'CatBoost Classifier',
-        - 'xgb' : 'XGBoost Classifier',
-        - 'ann' : 'Multilayer Perceptron Classifier',
-        - 'all' : 'Use all the above models',
+        - "lr": "Logistic Regression"
+        - "sgd": "Stochastic Gradient Descent"
+        - "perc": "Perceptron"
+        - "pass": "Passive Aggressive Classifier"
+        - "ridg": "Ridge Classifier"
+        - "svm": "Support Vector Machine"
+        - "knn": "K-Nearest Neighbors"
+        - "dt": "Decision Trees"
+        - "nb": "Naive Bayes"
+        - "rfc": "Random Forest Classifier"
+        - "gbc": "Gradient Boosting Classifier"
+        - "ada": "AdaBoost Classifier"
+        - "bag": "Bagging Classifier"
+        - "ext": "Extra Trees Classifier"
+        - "lgbm": "LightGBM Classifier"
+        - "cat": "CatBoost Classifier"
+        - "xgb": "XGBoost Classifier"
+        - "ann": "Multi Layer Perceptron Classifier"
+        - "poisson": "Poisson Classifier"
+        - "huber": "Huber Classifiers"
+        - "ridge_cv": "RidgeCV Classifier"
+        - "encv": "ElasticNet CV Classifier"
+        - "lcv": "LassoCV Classifier"
+        - "llic": "LassoLarsIC Classifier"
+        - "llcv": "LassoLarsCV Classifier"
+        - "all": "All Classifiers"
 
 2) Regression
 
        Available Models for Regression
 
-        - 'lin' : 'Linear Regression',
-        - 'sgd' : 'Stochastic Gradient Descent Regressor',
-        - 'elas': 'Elastic Net Regressot',
-        - 'krr' : 'Kernel Ridge Regressor',
-        - 'br'  : 'Bayesian Ridge Regressor',
-        - 'svr' : 'Support Vector Regressor',
-        - 'knn' : 'K-Nearest Regressor',
-        - 'dt'  : 'Decision Trees',
-        - 'rfr' : 'Random Forest Regressor',
-        - 'gbr' : 'Gradient Boost Regressor',
-        - 'ada' : 'AdaBoost Regressor',
-        - 'bag' : 'Bagging Regressor',
-        - 'extr': 'Extra Trees Regressor',
-        - 'lgbm': 'LightGBM Regressor',
-        - 'xgb' : 'XGBoost Regressor',
-        - 'cat' : 'Catboost Regressor',
-        - 'ann' : 'Multilayer Perceptron Regressor',
-        - 'all' : 'Uses all the above models'
+        - "lin": "Linear Regression"
+        - "sgd": "Stochastic Gradient Descent Regressor"
+        - "krr": "Kernel Ridge Regression"
+        - "elas": "Elastic Net Regression"
+        - "br": "Bayesian Ridge Regression"
+        - "svr": "Support Vector Regressor"
+        - "knn": "K-Nearest Neighbors"
+        - "dt": "Decision Trees Regressor"
+        - "rfr": "Random Forest Regressor"
+        - "gbr": "Gradient Boosted Regressor"
+        - "ada": "AdaBoostRegressor"
+        - "bag": "Bagging Regressor"
+        - "ext": "Extra Trees Regressor"
+        - "lgbm": "LightGBM Regressor"
+        - "xgb": "XGBoost Regressor"
+        - "cat": "Catboost Regressor"
+        - "ann": "Multi-Layer Perceptron Regressor"
+        - "poisson": "Poisson Regressor"
+        - "huber": "Huber Regressor"
+        - "gamma": "Gamma Regressor"
+        - "ridge": "Ridge CV Regressor"
+        - "encv": "ElasticNetCV Regressor"
+        - "lcv": "LassoCV Regressor"
+        - "llic": "LassoLarsIC Regressor"
+        - "llcv": "LassoLarsCV Regressor"
+        - "all": "All Regressors"
 
 ### Usage Example
 
