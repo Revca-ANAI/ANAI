@@ -1,4 +1,4 @@
-# ANAI an Automated Machine Learning Library by [Revca](www.revca.io)
+# ANAI an Automated Machine Learning Library by [Revca](https://revca.io/)
 
 ![ANAI LOGO](https://revca-assets.s3.ap-south-1.amazonaws.com/Full+version+on+black.jpeg)
 
@@ -122,11 +122,11 @@ A new ANAI Object can be loaded as well by specifying path of model and scaler
 
 ## More Examples
 
-You can find more examples/tutorials [here](<placeholder>)
+You can find more examples/tutorials [here](https://github.com/Revca-ANAI/ANAI/examples)
 
 ## Documentation
 
-More information about ANAI can be found [here](<placeholder>)
+More information about ANAI can be found [here](https://anai.readthedocs.io/en/latest/)
 
 ## Contributing
 
@@ -145,4 +145,4 @@ More information about ANAI can be found [here](<placeholder>)
 
 ## Roadmap
 
-- [ANAI's roadmap](<placeholder>)
+- [ANAI's roadmap](https://anai.io/)
