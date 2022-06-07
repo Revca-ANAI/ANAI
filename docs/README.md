@@ -107,6 +107,10 @@ More about Preprocessing can be found in the [Preprocessing](https://github.com/
 
 More information about AutoML can be found [AutoML](https://github.com/Revca-ANAI/ANAI/blob/main/docs/AutoML.md) section
 
+### Explainable ANAI
+
+More information about Explainable ANAI can be found [Explainable ANAI](https://github.com/Revca-ANAI/ANAI/blob/main/docs/ExplainableANAI.md) section
+
 ### Algorithms
 
 More about Algorithms can be found in the [Algorithms](https://github.com/Revca-ANAI/ANAI/blob/main/docs/Algorithms.md) section.
