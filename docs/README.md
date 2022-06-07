@@ -121,4 +121,4 @@ More about Anomaly Detection can be found in the [Anomaly Detection](https://git
 
 ### Ingesting data using inbuilt connectors
 
-More about Ingesting data using inbuilt connectors can be found in the [Ingesting data using inbuilt connectors](https://github.com/Revca-ANAI/ANAI/blob/main/docs/Ingestion.md) section.
+More about Ingesting data using inbuilt connectors can be found in the [Ingesting data using inbuilt connectors](#i[ngesting-data-using-inbuilt-connectors](https://github.com/Revca-ANAI/ANAI/blob/main/docs/Ingestion.md)) section.
