@@ -126,7 +126,7 @@ You can find more examples/tutorials [here](https://github.com/Revca-ANAI/ANAI/e
 
 ## Documentation
 
-More information about ANAI can be found [here](https://anai.readthedocs.io/en/latest/)
+More information about ANAI can be found [here](https://github.com/Revca-ANAI/ANAI/tree/main/docs)
 
 ## Contributing
 
