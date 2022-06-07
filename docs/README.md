@@ -101,20 +101,20 @@ Let's get started.
 
 ### ANAI Preprocessing
 
-More about Preprocessing can be found in the [Preprocessing](#preprocessing) section.
+More about Preprocessing can be found in the [Preprocessing](https://github.com/Revca-ANAI/ANAI/blob/main/docs/Preprocessing.md) section.
 
 ### ANAI AutoML
 
-More information about AutoML can be found [AutoML](#anai-automl) section
+More information about AutoML can be found [AutoML](https://github.com/Revca-ANAI/ANAI/blob/main/docs/AutoML.md) section
 
 ### Algorithms
 
-More about Algorithms can be found in the [Algorithms](#algorithms) section.
+More about Algorithms can be found in the [Algorithms](https://github.com/Revca-ANAI/ANAI/blob/main/docs/Algorithms.md) section.
 
 ### Anomaly Detection
 
-More about Anomaly Detection can be found in the [Anomaly Detection](#anomaly-detection) section.
+More about Anomaly Detection can be found in the [Anomaly Detection](https://github.com/Revca-ANAI/ANAI/blob/main/docs/AnomalyDetecion.md) section.
 
 ### Ingesting data using inbuilt connectors
 
-More about Ingesting data using inbuilt connectors can be found in the [Ingesting data using inbuilt connectors](#ingesting-data-using-inbuilt-connectors) section.
+More about Ingesting data using inbuilt connectors can be found in the [Ingesting data using inbuilt connectors](#i[ngesting-data-using-inbuilt-connectors](https://github.com/Revca-ANAI/ANAI/blob/main/docs/Ingestion.md)) section.
