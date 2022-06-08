@@ -140,7 +140,7 @@ More information about ANAI can be found [here](https://github.com/Revca-ANAI/AN
 ## Contact
 
 - [E-mail](mailto:info@anai.io)
-- [LinkedIn](https://www.linkedin.com/company/revca/)
+- [LinkedIn](https://www.linkedin.com/company/revca-io/)
 - [Website](https://www.anai.io/)
 
 ## Roadmap
