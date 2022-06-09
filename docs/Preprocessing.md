@@ -25,7 +25,7 @@ ANAI preprocessing pipeline
 
     Gives a column wise statistics of the dataset.
 
-        column_stats = prep.column_stats()
+        column_stats = prep.column_summary()
 
         Returns a DataFrame
 
@@ -49,9 +49,9 @@ ANAI preprocessing pipeline
 
     Scales the variables using StandardScaler.
 
-        df = prep.scale(columns = [<List of Columns>], method = 'standardize')
+        df = prep.scale(columns = [<List of Columns>], method = 'standard')
 
-        Available methods are 'standardize' and 'normalize'
+        Available methods are 'standardize' and 'normal'
 
         Returns a scaled DataFrame
 
@@ -67,7 +67,15 @@ ANAI preprocessing pipeline
 
     Prepares the data for modelling.
 
-        X_train, X_val, y_train, y_val, scaler = prep.prepare()
+        X_train, X_val, y_train, y_val, scaler = prep.prepare(features, labels, test_size, random_state, smote, k_neighbors)
+
+        Arguments:
+            - features: List of features to be used for training
+            - labels: List of labels to be used for training
+            - test_size: Size of the test set
+            - random_state: Random state for splitting the data
+            - smote: Boolean to use SMOTE or not
+            - k_neighbors: Number of neighbors to use for SMOTE
     
         Returns:
             - X_train: Training Features
