@@ -31,6 +31,16 @@ class Preprocessor:
         target: str,
         except_columns: list = [],
     ):
+        """ Initialize the Preprocessor class.
+        Arguments:
+            - dataset: pd.DataFrame
+                dataset to be used for preprocessing
+            - target: str
+                Name of the target column
+            - except_columns: list 
+                List of columns to exclude from the preprocessing
+        """
+        
         self.__dataset = dataset
         self.__columns = dataset.columns
         self.__except_columns = except_columns
@@ -50,6 +60,26 @@ class Preprocessor:
         self.labels = self.__dataset[self.target]
 
     def prepare(self, features, labels, test_size, random_state, smote, k_neighbors):
+        """
+        Prepare the data for modelling
+
+            Arguments:
+                - features: pd.DataFrame or np.array
+                    features to be used for training
+                - labels:  pd.Series or np.array
+                    labels to be used for training
+                - test_size: Size of the test set
+                - random_state: Random state for splitting the data
+                - smote: Boolean to use SMOTE or not
+                - k_neighbors: Number of neighbors to use for SMOTE
+        
+            Returns:
+                - X_train: Training Features
+                - X_val: Validation Features
+                - y_train: Training Labels
+                - y_val: Validation Labels
+                - sc:  Scaler Object
+        """
         try:
             if smote is True:
                 sm = SMOTE(k_neighbors=k_neighbors, random_state=random_state)
@@ -225,6 +255,25 @@ class Preprocessor:
     #     return multiple_outliers
 
     def impute(self, method: str):
+        """Imputes the missing values using the statistical methods.
+
+        Args:
+            method (str): Method to be used for imputation.
+                Possible values are:
+                    - 'mean': Mean imputation
+                    - 'median': Median imputation
+                    - 'mode': Mode imputation
+                    - 'drop': Drop the row if any of the columns has missing values
+                    - 'drop_col': Drop the column if any of the rows has missing values
+        Raises:
+            ValueError: If the method is not one of the above mentioned.
+
+        Returns:
+            dataset: pd.DataFrame
+                Dataset with imputed values.
+        """
+        
+        
         if method == "mean":
             dataset = self.__dataset.fillna(self.__dataset.mean())
             return dataset
@@ -243,14 +292,20 @@ class Preprocessor:
         else:
             raise ValueError("Invalid Imputing method")
 
-    def include_exclude_columns(self, __exclude_columns=[], __columns=[]):
+    def __include_exclude_columns(self, __exclude_columns=[], __columns=[]):
         self.__dataset = self.__dataset.drop(__exclude_columns, axis=1)
         self.__dataset = self.__dataset[__columns]
 
-    def correct_dtype(self, dtype):
+    def __correct_dtype(self, dtype):
         self.__dataset = self.__dataset.astype(dtype)
 
     def summary(self):
+        """Prints the summary of the dataset.
+
+        Returns:
+            pd.DataFrame: Dataset summary.
+        """
+        
         stats_summary = data_stats_summary(self.__dataset)
         summary_df = pd.DataFrame.from_dict(
             stats_summary, columns=["Stats"], orient="index"
@@ -258,6 +313,11 @@ class Preprocessor:
         return summary_df
 
     def column_summary(self):
+        """Prints the summary of the dataset.
+        
+        Returns:
+            pd.DataFrame: Column summary.
+        """
         col_stats = {}
         col_stats_ar = {}
         for i in range(len(self.__dataset.columns)):
@@ -273,18 +333,31 @@ class Preprocessor:
                     for m, n in l.items():
                         col_stats_cp[i][m] = n
         for i, j in col_stats_cp.items():
-            col_stats_cp[i].pop("advanced_stats")
+            if 'advanced_stats' in col_stats_cp[i].keys():
+                col_stats_cp[i].pop("advanced_stats")
         col_stats_df = pd.DataFrame.from_dict(col_stats_cp, orient="columns")
         return col_stats_df
 
-    def encode(self, type=None, features=None, labels=None, split = False):
+    def encode(self, type=None, split = False, **kwargs):
+        """ Encodes the categorical variables.
+        
+        Arguments:
+            type {str} -- Type of encoding to be used.
+            split {bool} -- If True, splits the dataset into train and test.
+            
+        Returns:
+            pd.DataFrame -- Encoded dataset.
+        """
+        
         if type == "onehot":
             combined_data, encoded_data = Encoder.one_hot_encoder(self.__dataset)
-            return combined_data, encoded_data
+            return combined_data
         elif type == "label":
             labels = Encoder.label_encoder(self.__dataset)
             return labels
         elif type == "anai":
+            features = kwargs["features"]
+            labels = kwargs["labels"]
             try:
                 cat_features = [
                     i for i in features.columns if features.dtypes[i] == "object"
@@ -333,10 +406,21 @@ class Preprocessor:
             except Exception as error:
                 print(traceback.format_exc())
                 print(Fore.RED + "Encoding Failed with error :", error)
-        else:
-            raise Exception("Invalid Encoder Type")
 
     def scale(self, columns, method):
+        """ Scales the columns.
+        
+        Arguments:
+            type {str} -- Type of scaling to be used.
+                    Available methods:
+                        - 'standardize': Standard scaling
+                        - 'normalize': Normalization
+            split {bool} -- If True, splits the dataset into train and test.
+            
+        Returns:
+            pd.DataFrame -- Scaled dataset.
+        """
+        
         __dataset1 = self.__dataset
         if method == "standardize":
             combined_data, _ = self.scaler.standardize(

@@ -2,7 +2,20 @@ from anai.unsupervised.anomaly_detection import AnomalyDetector
 import warnings
 
 
-def anomaly_detector(dataset, target, model=["IForest"]):
+def anomaly_detector(dataset, target: str , model=["IForest"]):
+    """Detects anomalies in a dataset.
+
+    Args:
+        dataset (pd.DataFrame): Dataset to be analyzed.
+        target (str): Target column name.
+        model (list, optional): Models to be used. Defaults to ["IForest"].
+
+    Returns:
+        pd.DataFrame: Anomaly detection results.
+        pd.DataFrame: Outliers results.
+        pd.DataFrame: Inliers detection results.
+        dict: Anomaly detection results.
+    """
     if dataset.isnull().values.any():
         warnings.warn("Dataset contains null values. Imputing with mean.")
         dataset = dataset.fillna(dataset.mean())

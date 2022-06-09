@@ -62,12 +62,7 @@ class Classification:
         metric:str="accuracy",
         lgbm_objective:str="binary",
     ):
-        """
-        Encode Categorical Data then Applies SMOTE , Splits the features and labels in training and validation sets with test_size = .2 , scales self.X_train, self.X_val using StandardScaler.\n
-        Fits every model on training set and predicts results find and plots Confusion Matrix,\n
-        finds accuracy of model applies K-Fold Cross Validation\n
-        and stores accuracy in variable name accuracy and model name in self.model name and returns both as a tuple.\n
-        Applies HyperParam Tuning and gives best params and accuracy.\n
+        """Initializes the Classifier class.
 
         Parameters:
 
@@ -804,13 +799,7 @@ class Regression:
         optuna_n_trials: int = 100,
         metric: str = "r2",
     ):
-        """
-        Encodes Categorical Data then Applies SMOTE , Splits the features and labels in training and validation sets with test_size = .2\n
-        scales X_train, X_val using StandardScaler.\n
-        Fits every model on training set and predicts results,Finds R^2 Scoreand mean square error\n
-        finds accuracy of model applies K-Fold Cross Validation\n
-        and stores its accuracies in a dictionary containing Model name as Key and accuracies as values and returns it\n
-        Applies HyperParam Tuning and gives best params and accuracy.\n
+        """Initializes the Regression class
 
         Parameters:
             df (dataframe): [Dataset containing features and target]
