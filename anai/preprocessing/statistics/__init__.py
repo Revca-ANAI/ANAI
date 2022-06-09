@@ -56,18 +56,15 @@ def dtype_ver(df, col):
     else:
         return "Unknown", ""
 
-
 def shap(df, col):
     return "{:0.2f}".format(
         float(shapiro(df[col])[0]) if df[col].dtype != "O" else "NA"
     )
 
-
 def most_frequent_values(df, col):
     return (
         df[col].value_counts()[:1].index.tolist()[0] if df[col].dtype == "O" else "NA"
     )
-
 
 def column_stats_summary(df, col):
     if "identi" in col.lower():

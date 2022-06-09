@@ -110,12 +110,10 @@ def cv(
         print(Fore.RED + "Cross Validation failed with error: ", error, "\n")
 
 
-def type_check(features, labels):
-    if not isinstance(features, pd.DataFrame) and not isinstance(
-        features, modin.pandas.dataframe.DataFrame
-    ):
-        raise TypeError("Features must be a pandas DataFrame")
-    if not isinstance(labels, pd.Series) and not isinstance(
-        labels, modin.pandas.series.Series
-    ):
-        raise TypeError("Labels must be a pandas Series")
+def type_check(df):
+    # if not isinstance(features, pd.DataFrame) and not isinstance(features, modin.pandas.dataframe.DataFrame):
+    #     raise TypeError("Features must be a pandas DataFrame")
+    # if not isinstance(labels, pd.Series) and not isinstance(labels, modin.pandas.series.Series):
+    #     raise TypeError("Labels must be a pandas Series")
+    if not isinstance(df, pd.DataFrame) and not isinstance(df, modin.pandas.dataframe.DataFrame):
+        raise TypeError("df must be a pandas DataFrame")

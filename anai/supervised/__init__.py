@@ -291,16 +291,16 @@ class Classification:
 
         if not self.rerun:
             # CHECKUP ---------------------------------------------------------------------
-            # try:
-            #     # type_check(self.features, self.labels)
-            # except TypeError as e:
-            #     print(Fore.RED + "[{}]: {}".format(type(e).__name__, e))
-            #     self.end = time.time()
-            #     final_time = self.end - self.start
-            #     print(Fore.RED + "\nANAI Run Failed [", "\u2713", "]\n")
-            #     print(Fore.BLUE + "Time Elapsed : ",
-            #           f"{final_time:.2f}", "seconds \n")
-            #     return
+            try:
+                type_check(self.df)
+            except TypeError as e:
+                print(Fore.RED + "[{}]: {}".format(type(e).__name__, e))
+                self.end = time.time()
+                final_time = self.end - self.start
+                print(Fore.RED + "\nANAI Run Failed [", "\u2713", "]\n")
+                print(Fore.BLUE + "Time Elapsed : ",
+                      f"{final_time:.2f}", "seconds \n")
+                return
 
             print(Fore.YELLOW + "Preprocessing Started [*]\n")
             if self.df.isna().any().any():
@@ -1021,16 +1021,16 @@ class Regression:
         self.start = time.time()
         if not self.rerun:
             # CHECKUP ---------------------------------------------------------------------
-            # try:
-            #     type_check(self.features, self.labels)
-            # except TypeError as e:
-            #     print(Fore.RED + "[{}]: {}".format(type(e).__name__, e))
-            #     self.end = time.time()
-            #     final_time = self.end - self.start
-            #     print(Fore.RED + "\nANAI Run Failed [", "\u2713", "]\n")
-            #     print(Fore.BLUE + "Time Elapsed : ",
-            #           f"{final_time:.2f}", "seconds \n")
-            #     return
+            try:
+                type_check(self.df)
+            except TypeError as e:
+                print(Fore.RED + "[{}]: {}".format(type(e).__name__, e))
+                self.end = time.time()
+                final_time = self.end - self.start
+                print(Fore.RED + "\nANAI Run Failed [", "\u2713", "]\n")
+                print(Fore.BLUE + "Time Elapsed : ",
+                      f"{final_time:.2f}", "seconds \n")
+                return
 
             print(Fore.YELLOW + "Preprocessing Started [*]\n")
             if self.df.isna().any().any():
