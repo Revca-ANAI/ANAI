@@ -70,8 +70,10 @@ ANAI preprocessing pipeline
         X_train, X_val, y_train, y_val, scaler = prep.prepare(features, labels, test_size, random_state, smote, k_neighbors)
 
         Arguments:
-            - features: List of features to be used for training
-            - labels: List of labels to be used for training
+            - features: pd.DataFrame or np.array
+                features to be used for training
+            - labels:  pd.Series or np.array
+                labels to be used for training
             - test_size: Size of the test set
             - random_state: Random state for splitting the data
             - smote: Boolean to use SMOTE or not
