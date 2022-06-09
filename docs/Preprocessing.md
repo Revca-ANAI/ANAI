@@ -49,9 +49,9 @@ ANAI preprocessing pipeline
 
     Scales the variables using StandardScaler.
 
-        df = prep.scale(columns = [<List of Columns>], method = 'standard')
+        df = prep.scale(columns = [<List of Columns>], method = 'standardize')
 
-        Available methods are 'standardize' and 'normal'
+        Available methods are 'standardize' and 'normalize'
 
         Returns a scaled DataFrame
 
