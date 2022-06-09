@@ -98,4 +98,4 @@ ANAI supports both standard and normalization scaling.
 
     Available Scaling Methods
         - "standardize": "Standard Scaling"
-        - "normal": "Normalization Scaling"
+        - "normalize": "Normalization Scaling"

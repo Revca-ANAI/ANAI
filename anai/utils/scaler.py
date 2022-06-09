@@ -1,4 +1,4 @@
-import pandas as pd
+import modin.pandas as pd
 from sklearn.preprocessing import StandardScaler, Normalizer
 from colorama import Fore
 

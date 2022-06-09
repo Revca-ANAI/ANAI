@@ -21,7 +21,7 @@ setup(
         ],
         include=["anai.*", "anai"],
     ),
-    version="prerelease-4",
+    version="prerelease-6",
     license="Apache License 2.0",
     description="Automated ML",
     long_description=long_description,
