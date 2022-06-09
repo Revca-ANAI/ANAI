@@ -1,6 +1,4 @@
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
-from sympy import true
-
 
 def surrogate_decision_tree(model, X, handler=None, isReg=True):
     new_X = model.predict(X)
