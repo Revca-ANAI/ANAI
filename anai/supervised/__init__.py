@@ -609,9 +609,9 @@ class Classification:
             self.reg_result["Classifier"] = self.classifier_name
             self.reg_result["Accuracy"] = self.kfold_accuracy
             self.reg_result["YPred"] = self.y_pred
-            self.reg_result = pd.DataFrame.from_dict(
+            reg_result = pd.DataFrame.from_dict(
                 self.reg_result, orient='index', columns=['Summary'])
-            return self.reg_result
+            return reg_result
         if self.pred_mode == "all":
             return self.result_df
 
@@ -1393,9 +1393,9 @@ class Regression:
             self.reg_result["Accuracy"] = self.kfold_accuracy
             self.reg_result["RMSE"] = self.rm_squared_error
             self.reg_result["YPred"] = self.y_pred
-            self.reg_result = pd.DataFrame.from_dict(
+            reg_result = pd.DataFrame.from_dict(
                 self.reg_result, orient='index', columns=['Summary'])
-            return self.reg_result
+            return reg_result
         if self.pred_mode == "all":
             return self.result_df
 
