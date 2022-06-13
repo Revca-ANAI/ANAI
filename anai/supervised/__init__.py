@@ -204,7 +204,7 @@ class Classification:
         self.preprocessor = Preprocessor(dataset=df, target=target)
         self.features = None
         self.labels = None
-        self.ori_features = self.features.copy()
+        self.ori_features = None
         self.original_predictor = predictor
         self.params = params
         self.tune = tune
@@ -310,6 +310,7 @@ class Classification:
             self.features = self.df.drop(
                 [self.target] + self.except_columns, axis=1)
             self.labels = self.df[self.target]
+            self.ori_features = self.features.copy()
             (
                 self.features,
                 self.labels,
