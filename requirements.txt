@@ -35,7 +35,7 @@ torchbnn
 xgboost
 yacs
 pyod
-modin[all]
+modin[all]==0.14.1
 distributed
 openpyxl
 category_encoders

@@ -200,6 +200,7 @@ class Classification:
         self.data_filepath = filepath
         if target is None:
             raise ValueError("Please provide a target variable")
+        self.except_columns = except_columns
         self.target = target
         self.preprocessor = Preprocessor(dataset=df, target=target)
         self.features = None
@@ -568,7 +569,7 @@ class Classification:
             print(Fore.YELLOW + "Tuning Started [*]\n")
         if not self.predictor == "nb":
             (
-                self.best_params,
+                best_params,
                 self.best_accuracy,
                 self.best_trained_model,
             ) = anai_tuner(
@@ -1348,7 +1349,7 @@ class Regression:
             print(Fore.YELLOW + "Tuning Started [*]\n")
         if not self.predictor == "nb":
             (
-                self.best_params,
+                best_params,
                 self.best_accuracy,
                 self.best_trained_model,
             ) = anai_tuner(
