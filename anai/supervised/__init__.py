@@ -6,6 +6,7 @@ import warnings
 from pickle import dump, load
 
 import modin.pandas as pd
+import pandas
 import numpy as np
 import optuna
 from anai.preprocessing import Preprocessor
@@ -627,19 +628,24 @@ class Classification:
             [Array]: [Predicted set for given test set]
         """
         if self.pred_mode == "all":
-            model = copy.deepcopy(self.best_classifier.model)
+            classifier = copy.deepcopy(self.best_classifier.model)
             print(Fore.YELLOW + "Predicting on Test Set using Best Model[*]\n")
         else:
-            model = copy.deepcopy(
+            classifier = copy.deepcopy(
                 self.model
             )
-        X_test = np.array(X_test)
+        X_test = np.array(X_test) if type(X_test) == list else X_test
+        if isinstance(X_test, pandas.core.frame.DataFrame) or isinstance(X_test, modin.pandas.DataFrame):
+            if self.target in X_test.columns:
+                X_test = X_test.drop(self.target, axis=1)
         if X_test.ndim == 1:
             X_test = X_test.reshape(1, -1)
-        X_test = pd.DataFrame(X_test, columns=self.features.columns)
-
-        y_test = model.predict(self.sc.transform(self.encoder.transform(X_test)))
-        y_test = self.le_encoder.inverse_transform(y_test)
+        X_test = pd.DataFrame(X_test, columns=self.features.columns) if type(
+            X_test) == np.ndarray else X_test
+        if isinstance(X_test, modin.pandas.DataFrame):
+            X_test = X_test._to_pandas()
+        y_test = classifier.predict(
+            self.sc.transform(self.encoder.transform(X_test)))
         print(Fore.BLUE + "Predicted Value : ", y_test, "\n")
         print(Fore.GREEN + "Prediction Done [", "\u2713", "]\n")
         return y_test
@@ -1417,10 +1423,17 @@ class Regression:
             regressor = copy.deepcopy(
                 self.model
             )
-        X_test = np.array(X_test)
+        X_test = np.array(X_test) if type(X_test) == list else X_test
+        if isinstance(X_test, pandas.core.frame.DataFrame) or isinstance(X_test, modin.pandas.DataFrame):
+            if self.target in X_test.columns:
+                X_test = X_test.drop(self.target, axis=1)
         if X_test.ndim == 1:
             X_test = X_test.reshape(1, -1)
-        X_test = pd.DataFrame(X_test, columns=self.features.columns)
+
+        X_test = pd.DataFrame(X_test, columns=self.features.columns) if type(
+            X_test) == np.ndarray else X_test
+        if isinstance(X_test, modin.pandas.DataFrame):
+            X_test = X_test._to_pandas()
         y_test = regressor.predict(
             self.sc.transform(self.encoder.transform(X_test)))
         print(Fore.BLUE + "Predicted Value : ", y_test, "\n")
