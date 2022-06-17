@@ -15,9 +15,6 @@ Let's get started.
     1) Python venv:
         pip install anai
 
-    2) Anaconda:
-        conda install anai
-
 ### Available Modelling Techniques
 
     1) Classification
