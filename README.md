@@ -19,7 +19,7 @@ Our Goal is to democratize Machine Learning and make it accessible to everyone.
 ### Installation
 
     1) Python venv:
-        pip install anai
+        pip install anai-opensource
 
 ### Available Modelling Techniques
 
