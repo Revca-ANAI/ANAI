@@ -31,7 +31,6 @@ setup(
     keywords=["ANAI", "AutoML", "Python"],
     install_requires=[
         open("requirements.txt", "r").read().splitlines(),
-        "missingpy @ git+https://github.com/d4rk-lucif3r/missingpy.git@0.2.0",
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",

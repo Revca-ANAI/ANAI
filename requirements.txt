@@ -44,3 +44,4 @@ snowflake-sqlalchemy
 combo
 python-Levenshtein-wheels; platform_system=="Windows"
 python-Levenshtein; platform_system=="Linux" or platform_system=="Darwin"
+missingpy @ https://anai-wheels.s3.ap-south-1.amazonaws.com/missingpy-0.2.0-py3-none-any.whl
