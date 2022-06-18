@@ -8,7 +8,7 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
-    name="anai",
+    name="anai-opensource",
     packages=find_namespace_packages(
         exclude=[
             "build.*",
@@ -21,13 +21,14 @@ setup(
         ],
         include=["anai.*", "anai"],
     ),
-    version="0.1.0",
+    version="0.1",
     license="Apache License 2.0",
     description="Automated ML",
+    url="https://github.com/Revca-ANAI/ANAI",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author="Arsh Anwar",
-    author_email="arsh.anwar@revca.io",
+    author="Revca-ANAI",
+    author_email="info@anai.io",
     keywords=["ANAI", "AutoML", "Python"],
     install_requires=[
         open("requirements.txt", "r").read().splitlines(),

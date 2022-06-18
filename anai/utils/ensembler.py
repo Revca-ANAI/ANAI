@@ -1,13 +1,5 @@
-from asyncio import tasks
-from audioop import rms
-from tkinter import N
 import numpy as np
-from combo.models.classifier_comb import SimpleClassifierAggregator
-from combo.models.classifier_stacking import Stacking
-from combo.models.cluster_comb import ClustererEnsemble, clusterer_ensemble_scores
-from combo.models.detector_comb import SimpleDetectorAggregator
-from h11 import Data
-from numpy import hstack
+
 from sklearn.ensemble import (
     StackingRegressor,
     VotingClassifier,
@@ -69,10 +61,6 @@ class Ensembler:
             #
             "Stacking Ensembler": self.__stacking_ensembler,
             "Max Voting Ensembler": self.__max_voting,
-        }
-        self.__ensembling_models_anom = {
-            "Cluster Ensembler": self.__cluster_ensembler,
-            "Simple Detector Ensembler": self.__simple_detector_agg_ensembler,
         }
         self.result = {}
         self.mode = None
@@ -178,31 +166,6 @@ class Ensembler:
             ensembler.fit(self.X_train, self.y_train)
         return ensembler
 
-    def __cluster_ensembler(self):
-        if self.task == "regression":
-            return None
-        elif self.task == "classification":
-            models = []
-            for i in self.models:
-                models.append(i[1])
-            ensembler_model = ClustererEnsemble(
-                models, n_clusters=self.n_clusters, pre_fitted=self.pre_fitted
-            )
-            ensembler_model.fit(self.X_train)
-            return ensembler_model
-
-    def __simple_detector_agg_ensembler(self):
-        if self.task == "regression":
-            return None
-        elif self.task == "classification":
-            models = []
-            for i in self.models:
-                models.append(i[1])
-            ensembler_model = SimpleDetectorAggregator(
-                base_estimators=models, pre_fitted=self.pre_fitted
-            )
-            ensembler_model.fit(self.X_train)
-            return ensembler_model
 
     def evaluator(self, model, model_name):
         self.y_pred = model.predict(self.X_val)
@@ -218,121 +181,3 @@ class Ensembler:
                 model, self.X_train, self.y_train, cv=self.cv_folds, scoring="accuracy"
             )
             self.accuracy = accuracy_score(self.y_val, self.y_pred)
-
-    # def SimpleClassifierAggregator_(self):
-
-    #     clf = SimpleClassifierAggregator(self.models, method='average')
-    #     clf.fit(self.X_train, self.y_train)
-    #     y_test_predicted = clf.predict(self.X_test)
-    #     avg = evaluate_print('Combination by avg   |',
-    #                          self.y_test, y_test_predicted)
-
-    #     clf_weights = np.array([0.1, 0.4, 0.1, 0.2, 0.2])
-    #     clf = SimpleClassifierAggregator(
-    #         self.models, method='average', weights=clf_weights)
-    #     clf.fit(self.X_train, self.y_train)
-    #     y_test_predicted = clf.predict(self.X_test)
-    #     w_avg = evaluate_print('Combination by w_avg |',
-    #                            self.y_test, y_test_predicted)
-
-    #     clf = SimpleClassifierAggregator(self.models, method='maximization')
-    #     clf.fit(self.X_train, self.y_train)
-    #     y_test_predicted = clf.predict(self.X_test)
-    #     maximization = evaluate_print(
-    #         'Combination by max   |', self.y_test, y_test_predicted)
-
-    #     clf_weights = np.array([0.1, 0.4, 0.1, 0.2, 0.2])
-    #     clf = SimpleClassifierAggregator(
-    #         self.models, method='majority_vote', weights=clf_weights)
-    #     clf.fit(self.X_train, self.y_train)
-    #     y_test_predicted = clf.predict(self.X_test)
-    #     w_vote = evaluate_print('Combination by w_vote|',
-    #                             self.y_test, y_test_predicted)
-
-    #     clf = SimpleClassifierAggregator(self.models, method='median')
-    #     clf.fit(self.X_train, self.y_train)
-    #     y_test_predicted = clf.predict(self.X_test)
-    #     median = evaluate_print('Combination by median|',
-    #                             self.y_test, y_test_predicted)
-
-    #     return avg, w_avg, maximization, w_vote, median
-    # def fit_ensemble(self, estimators):
-
-    #     meta_X = list()
-    #     for name, model in estimators:
-
-    #         model.fit(self.X_train, self.y_train)
-
-    #         yhat = model.predict(self.X_test)
-
-    #         yhat = yhat.view(len(yhat), 1)
-
-    #         meta_X.append(yhat)
-
-    #     meta_X = hstack(meta_X)
-
-    #     blender = LogisticRegression()
-
-    #     blender.fit(meta_X, self.y_test)
-    #     return blender
-
-    # def predict_ensemble(estimators, blender, X_test):
-
-    #     meta_X = list()
-    #     for name, model in estimators:
-
-    #         yhat = model.predict(X_test)
-
-    #         yhat = yhat.view(len(yhat), 1)
-
-    #         meta_X.append(yhat)
-
-    #     meta_X = hstack(meta_X)
-
-    #     return blender.predict(meta_X)
-
-    # def blending_classifier(self, estimators):
-
-    #     blender = self.fit_ensemble(estimators)
-    #     yhat = self.predict_ensemble(estimators, blender, self.X_test)
-    #     score = accuracy_score(self.y_test, yhat)
-    #     print('Blending Accuracy: %.3f' % (score*100))
-
-    # def fit_ensemble(self, estimators):
-
-    #     meta_X = list()
-    #     for name, model in estimators:
-
-    #         model.fit(self.X_train, self.y_train)
-
-    #         yhat = model.predict(self.X_test)
-
-    #         yhat = yhat.view(len(yhat), 1)
-
-    #         meta_X.append(yhat)
-
-    #     meta_X = hstack(meta_X)
-
-    #     blender_r = LinearRegression()
-
-    #     blender_r.fit(meta_X, self.y_test)
-    #     return blender_r
-
-    # def predict_ensemble(estimators, blender_r, X_test):
-
-    #     meta_X = list()
-    #     for name, model in estimators:
-
-    #         yhat = model.predict(X_test)
-
-    #         yhat = yhat.view(len(yhat), 1)
-
-    #         meta_X.append(yhat)
-
-    #     meta_X = hstack(meta_X)
-
-    #     return blender_r.predict(meta_X)
-
-    # def blending_classifier(self, estimators):
-    #     blender_r = self.fit_ensemble(estimators)
-    #     yhat = self.predict_ensemble(estimators, blender_r, self.X_test)

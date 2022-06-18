@@ -1,7 +1,6 @@
 boto3
 catboost
 colorama
-comb
 datashape
 db-dtypes
 decorator
@@ -11,9 +10,7 @@ google-cloud-bigquery
 google-cloud-bigquery-storage
 h11
 imbalanced-learn
-imblearn
 lightgbm
-livelossplot
 matplotlib
 matplotlib-inline
 networkx
@@ -31,7 +28,6 @@ scikit-learn
 scipy>=1.5
 seaborn
 shap
-torchbnn
 xgboost
 yacs
 pyod
@@ -41,6 +37,5 @@ openpyxl
 category_encoders
 snowflake-connector-python
 snowflake-sqlalchemy
-combo
 python-Levenshtein-wheels; platform_system=="Windows"
 python-Levenshtein; platform_system=="Linux" or platform_system=="Darwin"
