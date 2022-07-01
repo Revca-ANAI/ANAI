@@ -54,7 +54,8 @@ def run(
     metric: str = None,
     suppress_task_detection=False,
     task=None,
-    ensemble: bool =False,
+    ensemble: bool =True,
+    mode: str = "None",
 ):
     """Initializes ANAI run.
 
@@ -123,7 +124,9 @@ def run(
                     classification : Classification
                     regression : Regression
             ensemble : bool
-                Whether to use ensemble. Default = False
+                Whether to use ensemble. Default = True
+            mode : str
+                Model selection mode. Default = 'None'
         Returns:
 
             ai : regression or classification object
@@ -168,8 +171,11 @@ def run(
                 raise ValueError("Please provide a dataframe or a filepath")
         if __task(df, target) and not suppress_task_detection or task == "regression":
             print(Fore.BLUE + "Task: Regression", Fore.RESET)
-            if len(predictor) == 0:
+            if len(predictor) == 0 and mode is None:
                 predictor = ["lin"]
+            if mode == 'auto':
+                predictor = ['all']
+                ensemble = True
             if metric is None:
                 metric = "r2"
             regressor = Regression(
@@ -207,8 +213,11 @@ def run(
             or task == "classification"
         ):
             print(Fore.BLUE + "Task: Classification", Fore.RESET)
-            if len(predictor) == 0:
+            if len(predictor) == 0 and mode is None:
                 predictor = ["lr"]
+            if mode == 'auto':
+                predictor = ['all']
+                ensemble = True
             if metric is None:
                 metric = "accuracy"
             classifier = Classification(
@@ -232,6 +241,7 @@ def run(
                 k_neighbors=k_neighbors,
                 verbose=verbose,
                 ensemble=ensemble,
+                exclude_models=exclude_models,
             )
             return classifier
     except KeyboardInterrupt:

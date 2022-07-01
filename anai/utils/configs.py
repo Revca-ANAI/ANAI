@@ -55,14 +55,14 @@ regressors = {
     "xgb": "XGBoost Regressor",
     "cat": "Catboost Regressor",
     "ann": "Multi-Layer Perceptron Regressor",
-    "poisson": "Poisson Regressor",
+    # "poisson": "Poisson Regressor",
     "huber": "Huber Regressor",
     "gamma": "Gamma Regressor",
     "ridge": "Ridge CV Regressor",
     "encv": "ElasticNetCV Regressor",
     "lcv": "LassoCV Regressor",
-    "llic": "LassoLarsIC Regressor",
-    "llcv": "LassoLarsCV Regressor",
+    # "llic": "LassoLarsIC Regressor",
+    # "llcv": "LassoLarsCV Regressor",
 }
 
 classifiers_ver = {

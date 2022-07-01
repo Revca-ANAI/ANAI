@@ -62,7 +62,7 @@ class Classification:
         optuna_n_trials:int=100,
         metric:str="accuracy",
         lgbm_objective:str="binary",
-        ensemble:bool=False,
+        ensemble:bool=True,
     ):
         """Initializes the Classifier class.
 
@@ -155,7 +155,7 @@ class Classification:
             lgbm_objective : str
                 Objective for lgbm classifier. Default = 'binary'
             ensemble : boolean
-                Whether to use ensemble. Default = False
+                Whether to use ensemble. Default = True
 
         Returns:
 
@@ -816,7 +816,7 @@ class Regression:
         optuna_direction: str = "maximize",
         optuna_n_trials: int = 100,
         metric: str = "r2",
-        ensemble: bool = False,
+        ensemble: bool = True,
     ):
         """Initializes the Regression class
 
@@ -899,7 +899,7 @@ class Regression:
             optuna_n_trials : int
                 No. of trials for optuna. Default = 100
             ensemble : boolean
-                Whether to use ensemble methods. Default = False
+                Whether to use ensemble methods. Default = True
 
         Returns:
 
