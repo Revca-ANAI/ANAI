@@ -62,6 +62,7 @@ class Classification:
         optuna_n_trials:int=100,
         metric:str="accuracy",
         lgbm_objective:str="binary",
+        ensemble:bool=False,
     ):
         """Initializes the Classifier class.
 
@@ -153,6 +154,8 @@ class Classification:
                 Metric to be used in optuna. Default = 'R^2'
             lgbm_objective : str
                 Objective for lgbm classifier. Default = 'binary'
+            ensemble : boolean
+                Whether to use ensemble. Default = False
 
         Returns:
 
@@ -249,6 +252,9 @@ class Classification:
         self.result_df = pd.DataFrame(index=None)
         self.classifiers = copy.deepcopy(classifiers)
         self.model = None
+        
+        self.ensemble = ensemble
+        
         for i in self.exclude_models:
             self.classifiers.pop(i)
         self.classifier_wrap = None
@@ -514,24 +520,25 @@ class Classification:
             by="Cross Validated Accuracy", ascending=False)
         top_result = self.result_df.sort_values(
             by=['Cross Validated Accuracy'], ascending=False).head(5)
-        estimators = []
-        est1 = []
-        for i in range(top_result.shape[0]):
-            if not top_result.iloc[i]['Name'] == 'K-Nearest Neighbors':
-                estimators.append(
-                    top_result.iloc[i]['Model'])
-                est1.append(
-                    (top_result.iloc[i]['Name'], top_result.iloc[i]['Model']))
-        print(Fore.YELLOW + "Ensembling on top {} models\n".format(
-            5 if len(estimators) > 5 else len(estimators)))
-        try:
-            ens_result = self.ensembler.ensemble(
-                self.X_train, self.y_train, self.X_val, self.y_val, cv_folds=self.cv_folds, estimators=estimators, est=est1)
-            self.result_df = pd.concat(
-                [self.result_df, ens_result], axis=0)
-        except Exception as error:
-            print(traceback.format_exc())
-            print(Fore.RED+"Ensembling Failed with error: ", error, "\n")
+        if self.ensemble:
+            estimators = []
+            est1 = []
+            for i in range(top_result.shape[0]):
+                if not top_result.iloc[i]['Name'] == 'K-Nearest Neighbors':
+                    estimators.append(
+                        top_result.iloc[i]['Model'])
+                    est1.append(
+                        (top_result.iloc[i]['Name'], top_result.iloc[i]['Model']))
+            print(Fore.YELLOW + "Ensembling on top {} models\n".format(
+                5 if len(estimators) > 5 else len(estimators)))
+            try:
+                ens_result = self.ensembler.ensemble(
+                    self.X_train, self.y_train, self.X_val, self.y_val, cv_folds=self.cv_folds, estimators=estimators, est=est1)
+                self.result_df = pd.concat(
+                    [self.result_df, ens_result], axis=0)
+            except Exception as error:
+                print(traceback.format_exc())
+                print(Fore.RED+"Ensembling Failed with error: ", error, "\n")
         self.result_df = self.result_df.sort_values(
             by=['Cross Validated Accuracy'], ascending=False).reset_index(drop=True)
         print(Fore.GREEN + "Training Done [", "\u2713", "]\n")
@@ -809,6 +816,7 @@ class Regression:
         optuna_direction: str = "maximize",
         optuna_n_trials: int = 100,
         metric: str = "r2",
+        ensemble: bool = False,
     ):
         """Initializes the Regression class
 
@@ -890,6 +898,8 @@ class Regression:
                     minimize : Minimize
             optuna_n_trials : int
                 No. of trials for optuna. Default = 100
+            ensemble : boolean
+                Whether to use ensemble methods. Default = False
 
         Returns:
 
@@ -994,6 +1004,9 @@ class Regression:
         self.pred_mode = ""
         self.model_to_predict = None
         self.model = None
+        
+        self.ensemble = ensemble
+        
         if path != None:
             try:
                 self.model, self.sc = self.__load(path)
@@ -1288,28 +1301,29 @@ class Regression:
             by=['Cross Validated Accuracy'], ascending=False)
         top_result = self.result_df.sort_values(
             by=['Cross Validated Accuracy'], ascending=False).head(5)
-        estimators = []
-        est1 = []
-        for i in range(top_result.shape[0]):
-            if not top_result.iloc[i]['Name'] == 'K-Nearest Neighbors':
-                estimators.append(
-                    top_result.iloc[i]['Model'])
-                est1.append(
-                    (top_result.iloc[i]['Name'], top_result.iloc[i]['Model']))
-        self.estimators = estimators
-        print(Fore.YELLOW + "Ensembling on top {} models\n".format(
-            5 if len(estimators) > 5 else len(estimators)))
-        try:
-            ens_result = self.ensembler.ensemble(
-                self.X_train, self.y_train, self.X_val, self.y_val, cv_folds=self.cv_folds, estimators=estimators, est=est1)
-            self.result_df = pd.concat(
-                [self.result_df, ens_result], axis=0)
-        except Exception as error:
-            print(
-                Fore.RED + "Ensembling Failed with error: ",
-                error,
-                "\n",
-            )
+        if self.ensemble:
+            estimators = []
+            est1 = []
+            for i in range(top_result.shape[0]):
+                if not top_result.iloc[i]['Name'] == 'K-Nearest Neighbors':
+                    estimators.append(
+                        top_result.iloc[i]['Model'])
+                    est1.append(
+                        (top_result.iloc[i]['Name'], top_result.iloc[i]['Model']))
+            self.estimators = estimators
+            print(Fore.YELLOW + "Ensembling on top {} models\n".format(
+                5 if len(estimators) > 5 else len(estimators)))
+            try:
+                ens_result = self.ensembler.ensemble(
+                    self.X_train, self.y_train, self.X_val, self.y_val, cv_folds=self.cv_folds, estimators=estimators, est=est1)
+                self.result_df = pd.concat(
+                    [self.result_df, ens_result], axis=0)
+            except Exception as error:
+                print(
+                    Fore.RED + "Ensembling Failed with error: ",
+                    error,
+                    "\n",
+                )
         self.result_df = self.result_df.sort_values(
             by=['Cross Validated Accuracy'], ascending=False).reset_index(drop=True)
         print(Fore.GREEN + "Training Done [", "\u2713", "]\n")

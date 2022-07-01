@@ -36,7 +36,7 @@ class Ensembler:
         self.est = None
         self.__ensembling_models_reg = {
             'Stacking Ensembler': self._stacking_ensembler,
-            'Stacking Ensembler with CV': self._stacking_ensembler_cv,
+            # 'Stacking Ensembler with CV': self._stacking_ensembler_cv,
             'Max Voting Ensembler': self._max_voting
         }
         self.__ensembling_models_clf = {

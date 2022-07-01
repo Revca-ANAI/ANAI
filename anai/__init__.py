@@ -54,6 +54,7 @@ def run(
     metric: str = None,
     suppress_task_detection=False,
     task=None,
+    ensemble: bool =False,
 ):
     """Initializes ANAI run.
 
@@ -121,7 +122,8 @@ def run(
                 Available Tasks:
                     classification : Classification
                     regression : Regression
-
+            ensemble : bool
+                Whether to use ensemble. Default = False
         Returns:
 
             ai : regression or classification object
@@ -196,6 +198,7 @@ def run(
                 optuna_direction=optuna_direction,
                 optuna_n_trials=optuna_n_trials,
                 metric=metric,
+                ensemble=ensemble,
             )
             return regressor
         elif (
@@ -228,6 +231,7 @@ def run(
                 smote=smote,
                 k_neighbors=k_neighbors,
                 verbose=verbose,
+                ensemble=ensemble,
             )
             return classifier
     except KeyboardInterrupt:
