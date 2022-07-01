@@ -1,4 +1,7 @@
-from contextlib import suppress
+import six
+import sys
+sys.modules['sklearn.externals.six'] = six
+
 import inspect
 import os
 import shutil

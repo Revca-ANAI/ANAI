@@ -21,7 +21,7 @@ setup(
         ],
         include=["anai.*", "anai"],
     ),
-    version="0.1.2-alpha",
+    version="0.1.2-alpha-2",
     license="Apache License 2.0",
     description="Automated ML",
     url="https://github.com/Revca-ANAI/ANAI",

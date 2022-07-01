@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
-from combo.models.cluster_comb import ClustererEnsemble
-from combo.models.detector_comb import SimpleDetectorAggregator
+
 from mlxtend.classifier import (EnsembleVoteClassifier, StackingClassifier,
                                 StackingCVClassifier)
 from mlxtend.regressor import StackingCVRegressor, StackingRegressor
@@ -45,10 +44,6 @@ class Ensembler:
             'Stacking Ensembler': self._stacking_ensembler,
             'Stacking Ensembler with CV': self._stacking_ensembler_cv,
             'Max Voting Ensembler': self._max_voting
-        }
-        self.__ensembling_models_anom = {
-            'Cluster Ensembler': self._cluster_ensembler,
-            'Simple Detector Ensembler': self._simple_detector_agg_ensembler
         }
         self.result = {}
         self.mode = None
@@ -160,30 +155,6 @@ class Ensembler:
                 clfs=self.models, verbose=self.verbose)
             ensembler.fit(self.X_train, self.y_train)
         return ensembler
-
-    def _cluster_ensembler(self):
-        if self.task == 'regression':
-            return None
-        elif self.task == 'classification':
-            models = []
-            for i in self.models:
-                models.append(i[1])
-            ensembler_model = ClustererEnsemble(
-                models, n_clusters=self.n_clusters, pre_fitted=self.pre_fitted)
-            ensembler_model.fit(self.X_train)
-            return ensembler_model
-
-    def _simple_detector_agg_ensembler(self):
-        if self.task == 'regression':
-            return None
-        elif self.task == 'classification':
-            models = []
-            for i in self.models:
-                models.append(i[1])
-            ensembler_model = SimpleDetectorAggregator(
-                base_estimators=models, pre_fitted=self.pre_fitted)
-            ensembler_model.fit(self.X_train)
-            return ensembler_model
 
     def evaluator(self, model, model_name):
         self.y_pred = model.predict(self.X_val)
