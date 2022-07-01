@@ -39,3 +39,4 @@ snowflake-connector-python
 snowflake-sqlalchemy
 python-Levenshtein-wheels; platform_system=="Windows"
 python-Levenshtein; platform_system=="Linux" or platform_system=="Darwin"
+mlxtend
