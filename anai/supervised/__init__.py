@@ -267,7 +267,13 @@ class Classification:
             optuna.logging.set_verbosity(optuna.logging.WARNING)
         self.explainer = Explainer()
         self.ensembler = Ensembler(
-            "classification", n_estimators=3, n_clusters=3)
+            "classification",
+            n_estimators=3,
+            n_clusters=3,
+            estimators=None,
+            verbose=False,
+            random_state=self.random_state
+        )
         self.fit_params = {}
         self.encoded_column_names = []
         self.dimension_handler = DimensionHandler()
@@ -504,6 +510,32 @@ class Classification:
         self.result_df["Accuracy"] = self.acc
         self.result_df["Cross Validated Accuracy"] = self.k_fold_accuracy
         self.result_df["Model"] = self.classifier_model
+        self.result_df = self.result_df.sort_values(
+            by="Cross Validated Accuracy", ascending=False)
+        top_result = self.result_df.sort_values(
+            by=['Cross Validated Accuracy'], ascending=False).head(5)
+        estimators = []
+        est1 = []
+        for i in range(top_result.shape[0]):
+            if not top_result.iloc[i]['Name'] == 'K-Nearest Neighbors':
+                estimators.append(
+                    top_result.iloc[i]['Model'])
+                est1.append(
+                    (top_result.iloc[i]['Name'], top_result.iloc[i]['Model']))
+        print(Fore.YELLOW + "Ensembling on top {} models\n".format(
+            5 if len(estimators) > 5 else len(estimators)))
+        try:
+            ens_result = self.ensembler.ensemble(
+                self.X_train, self.y_train, self.X_val, self.y_val, cv_folds=self.cv_folds, estimators=estimators, est=est1)
+            self.result_df = pd.concat(
+                [self.result_df, ens_result], axis=0)
+        except Exception as error:
+            print(traceback.format_exc())
+            print(Fore.RED+"Ensembling Failed with error: ", error, "\n")
+        self.result_df = self.result_df.sort_values(
+            by=['Cross Validated Accuracy'], ascending=False).reset_index(drop=True)
+        print(Fore.GREEN + "Training Done [", "\u2713", "]\n")
+        print(Fore.CYAN + "Results Below\n")
         if self.tune:
             self.result_df["Best Parameters"] = self.best_params
             self.result_df["Best Accuracy"] = self.bestacc
@@ -514,54 +546,25 @@ class Classification:
         else:
             self.best_classifier = Best(
                 self.result_df.loc[self.result_df["Cross Validated Accuracy"].idxmax(
-                )],
-                self.tune,
+                )], self.tune
             )
-        self.result_df = self.result_df.sort_values(
-            by="Cross Validated Accuracy", ascending=False
-        )
-        top_result = self.result_df.sort_values(
-            by=["Cross Validated Accuracy"], ascending=False
-        ).head(5)
-        estimators = []
-        for i in range(top_result.shape[0]):
-            if not top_result.iloc[i]["Name"] == "K-Nearest Neighbors":
-                estimators.append(
-                    (top_result.iloc[i]["Name"], top_result.iloc[i]["Model"])
-                )
-        print(Fore.YELLOW + "Ensembling on top {} models\n".format(5 if len(estimators) > 5 else len(estimators)))
-        try:
-            ens_result = self.ensembler.ensemble(
-                self.X_train,
-                self.y_train,
-                self.X_val,
-                self.y_val,
-                cv_folds=self.cv_folds,
-                estimators=estimators,
-            )
-            self.result_df = pd.concat([self.result_df, ens_result], axis=0)
-        except Exception as error:
-            print(Fore.RED + "Ensembling Failed with error: ", error, "\n")
-        self.result_df = self.result_df.sort_values(
-            by=["Cross Validated Accuracy"], ascending=False
-        ).reset_index(drop=True)
-        print(Fore.GREEN + "Training Done [", "\u2713", "]\n")
-        print(Fore.CYAN + "Results Below\n")
-        display(self.result_df.drop(["Model"], axis=1))
+        display(self.result_df.drop(['Model'], axis=1))
         print(Fore.GREEN + "\nCompleted ANAI Run [", "\u2713", "]\n")
         if len(self.model_to_predict) > 1:
-            self.best_classifier_path, self.scaler_path = self.save(
-                best=True, model=self.best_classifier.model, scaler=self.sc
+            self.model = self.best_classifier.model
+            self.model_name = self.best_classifier.name
+            self.end = time.time()
+            final_time = self.end - self.start
+            self.meta_path = self.save(
+                best=True
             )
             print(
                 Fore.CYAN
-                + "Saved Best Model to {} and its scaler to {}".format(
-                    self.best_classifier_path, self.scaler_path
+                + "Saved Best Model at {} ".format(
+                    self.meta_path
                 ),
                 "\n",
             )
-        self.end = time.time()
-        final_time = self.end - self.start
         print(Fore.BLUE + "Time Elapsed : ", f"{final_time:.2f}", "seconds \n")
         return
 
@@ -1006,7 +1009,7 @@ class Regression:
             n_clusters=3,
             estimators=None,
             verbose=False,
-            result_df=None,
+            random_state=self.random_state
         )
         self.fit_params = {}
         self.dimension_handler = DimensionHandler()
@@ -1281,6 +1284,36 @@ class Regression:
         self.result_df["Root Mean Squared Error"] = self.rmse
         self.result_df["Cross Validated Accuracy"] = self.k_fold_accuracy
         self.result_df["Model"] = self.regressor_model
+        self.result_df = self.result_df.sort_values(
+            by=['Cross Validated Accuracy'], ascending=False)
+        top_result = self.result_df.sort_values(
+            by=['Cross Validated Accuracy'], ascending=False).head(5)
+        estimators = []
+        est1 = []
+        for i in range(top_result.shape[0]):
+            if not top_result.iloc[i]['Name'] == 'K-Nearest Neighbors':
+                estimators.append(
+                    top_result.iloc[i]['Model'])
+                est1.append(
+                    (top_result.iloc[i]['Name'], top_result.iloc[i]['Model']))
+        self.estimators = estimators
+        print(Fore.YELLOW + "Ensembling on top {} models\n".format(
+            5 if len(estimators) > 5 else len(estimators)))
+        try:
+            ens_result = self.ensembler.ensemble(
+                self.X_train, self.y_train, self.X_val, self.y_val, cv_folds=self.cv_folds, estimators=estimators, est=est1)
+            self.result_df = pd.concat(
+                [self.result_df, ens_result], axis=0)
+        except Exception as error:
+            print(
+                Fore.RED + "Ensembling Failed with error: ",
+                error,
+                "\n",
+            )
+        self.result_df = self.result_df.sort_values(
+            by=['Cross Validated Accuracy'], ascending=False).reset_index(drop=True)
+        print(Fore.GREEN + "Training Done [", "\u2713", "]\n")
+        print(Fore.CYAN + "Results Below\n")
         if self.tune:
             self.result_df["Best Parameters"] = self.best_params
             self.result_df["Best Accuracy"] = self.bestacc
@@ -1297,56 +1330,22 @@ class Regression:
                 self.tune,
                 isReg=True,
             )
-        self.result_df = self.result_df.sort_values(
-            by=["Cross Validated Accuracy"], ascending=False
-        )
-        top_result = self.result_df.sort_values(
-            by=["Cross Validated Accuracy"], ascending=False
-        ).head(5)
-        estimators = []
-        for i in range(top_result.shape[0]):
-            if not top_result.iloc[i]["Name"] == "K-Nearest Neighbors":
-                estimators.append(
-                    (top_result.iloc[i]["Name"], top_result.iloc[i]["Model"])
-                )
-        print(Fore.YELLOW + "Ensembling on top {} models\n".format(
-            5 if len(estimators) > 5 else len(estimators)))
-        try:
-            ens_result = self.ensembler.ensemble(
-                self.X_train,
-                self.y_train,
-                self.X_val,
-                self.y_val,
-                cv_folds=self.cv_folds,
-                estimators=estimators,
-            )
-            self.result_df = pd.concat([self.result_df, ens_result], axis=0)
-        except Exception as error:
-            print(
-                Fore.RED + "Ensembling Failed with error: ",
-                error,
-                "\n",
-            )
-        self.result_df = self.result_df.sort_values(
-            by=["Cross Validated Accuracy"], ascending=False
-        ).reset_index(drop=True)
-        print(Fore.GREEN + "Training Done [", "\u2713", "]\n")
-        print(Fore.CYAN + "Results Below\n")
-        display(self.result_df.drop(["Model"], axis=1))
+        display(self.result_df.drop(['Model'], axis=1))
         print(Fore.GREEN + "\nCompleted ANAI Run [", "\u2713", "]\n")
         if len(self.model_to_predict) > 1:
-            self.best_regressor_path, self.scaler_path = self.save(
-                best=True, model=self.best_regressor.model, scaler=self.sc
+            self.model = self.best_regressor.model
+            self.end = time.time()
+            final_time = self.end - self.start
+            self.meta_path = self.save(
+                best=True,
             )
             print(
                 Fore.CYAN
-                + "Saved Best Model to {} and its scaler to {}".format(
-                    self.best_regressor_path, self.scaler_path
+                + "Saved Best Model at {} ".format(
+                    self.meta_path
                 ),
                 "\n",
             )
-        self.end = time.time()
-        final_time = self.end - self.start
         print(Fore.BLUE + "Time Elapsed : ", f"{final_time:.2f}", "seconds \n")
         return
 
