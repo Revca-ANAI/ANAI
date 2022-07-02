@@ -223,37 +223,6 @@ class Preprocessor:
         except Exception as error:
             print(Fore.RED + "Skewness Correction Failed with error : ", error, "\n")
 
-    # def detect_outliers(self):
-    #     """
-    #     This function takes dataset and columns as input and finds Q1, Q3 and IQR for that list of column
-    #     Detects the outlier and it index and stores them in a list.
-    #     Then it creates as counter object with that list and stores it
-    #     in Multiple Outliers list if the value of outlier is greater than 1.5
-
-    #     Ex:
-    #         1) For printing no. of outliers.
-    #             print("number of outliers detected --> ",
-    #             len(dataset.loc[detect_outliers(dataset, dataset.columns[:-1])]))
-    #         2) Printing rows and columns collecting the outliers
-    #             dataset.loc[detect_outliers(dataset.columns[:-1])]
-    #         3) Dropping those detected outliers
-    #             dataset = dataset.drop(detect_outliers(dataset.columns[:-1]),axis = 0).reset_index(drop = True)
-    #     """
-    #     outlier_indices = []
-    #     for column in self.__columns:
-    #         Q1 = np.percentile(self.__dataset[column], 25)
-    #         Q3 = np.percentile(self.__dataset[column], 75)
-    #         IQR = Q3 - Q1
-    #         outlier_step = IQR * 1.5
-    #         outlier_list_col = self.__dataset[
-    #             (self.__dataset[column] < Q1 - outlier_step)
-    #             | (self.__dataset[column] > Q3 + outlier_step)
-    #         ].index
-    #         outlier_indices.extend(outlier_list_col)
-    #     outlier_indices = Counter(outlier_indices)
-    #     multiple_outliers = list(i for i, v in outlier_indices.items() if v > 1.5)
-    #     return multiple_outliers
-
     def impute(self, method: str):
         """Imputes the missing values using the statistical methods.
 
@@ -291,13 +260,6 @@ class Preprocessor:
             return dataset
         else:
             raise ValueError("Invalid Imputing method")
-
-    def __include_exclude_columns(self, __exclude_columns=[], __columns=[]):
-        self.__dataset = self.__dataset.drop(__exclude_columns, axis=1)
-        self.__dataset = self.__dataset[__columns]
-
-    def __correct_dtype(self, dtype):
-        self.__dataset = self.__dataset.astype(dtype)
 
     def summary(self):
         """Prints the summary of the dataset.
@@ -435,3 +397,14 @@ class Preprocessor:
             return combined_data
         else:
             raise Exception("Invalid Scaler Type")
+
+    def describe(self):
+        """Describes the dataset.
+        
+        Returns:
+            pd.DataFrame: Dataset summary.
+        """
+        self.__dataset.dataset.describe().T.style.bar(
+            subset=['mean'],
+            color='#606ff2').background_gradient(
+            subset=['std'], cmap='PuBu').background_gradient(subset=['50%'], cmap='PuBu')

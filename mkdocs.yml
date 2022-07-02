@@ -1,0 +1,5 @@
+site_name: Anai Documentation
+nav:
+    - Home: index.md
+    - Features: Features.md
+theme: readthedocs
