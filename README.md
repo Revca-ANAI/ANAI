@@ -5,6 +5,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Downloads](https://static.pepy.tech/personalized-badge/lucifer-ml?period=total&units=international_system&left_color=black&right_color=green&left_text=Total%20Downloads)](https://pepy.tech/project/lucifer-ml)
 [![Downloads](https://static.pepy.tech/personalized-badge/lucifer-ml?period=month&units=international_system&left_color=black&right_color=green&left_text=Downloads%20per%20Month)](https://pepy.tech/project/lucifer-ml)
+[![Documentation Status](https://readthedocs.org/projects/anai/badge/?version=main)](https://anai.readthedocs.io/en/main/?badge=main)
 
 ## About
 
@@ -122,7 +123,7 @@ You can find more examples/tutorials [here](https://github.com/Revca-ANAI/ANAI/e
 
 ## Documentation
 
-More information about ANAI can be found [here](https://github.com/Revca-ANAI/ANAI/tree/main/docs)
+More information about ANAI can be found [here](https://anai.readthedocs.io/en/main/)
 
 ## Contributing
 
