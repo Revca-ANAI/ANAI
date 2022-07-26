@@ -5,12 +5,6 @@ import modin.pandas as pd
 
 
 def permutational_feature_importance(columns, X_test, y_test, model, isReg=False):
-    # if isinstance(y_test, np.ndarray):
-    #     if len(np.unique(y_test)) > 2 and not isReg:
-    #         raise Exception("Cannot use Permutation Explainers for Multi Class Classification")
-    # else:
-    #     if len(np.unique(y_test.values)) > 2 and not isReg:
-    #         raise Exception("Cannot use Permutation Explainers for Multi Class Classification")
     perm_importance = permutation_importance(
         model,
         X_test,
