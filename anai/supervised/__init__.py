@@ -102,6 +102,16 @@ class Classification:
                             "lcv": "LassoCV Classifier",\n
                             "llic": "LassoLarsIC Classifier",\n
                             "llcv": "LassoLarsCV Classifier",\n
+                            "ransac": "RANSACClassifiers",\n
+                            "ompcv": "OrthogonalMatchingPursuitCV Classifier",\n
+                            "omp": "OrthogonalMatchingPursuit Classifier",\n
+                            "iso": "IsotonicRegression Classifier",\n
+                            "rad": "RadiusNeighbors Classifier",\n
+                            "quantile": "QuantileRegression Classifier",\n
+                            "theil": "TheilSenRegressor Classifier",\n
+                            "lars": "Lars Classifeir",\n
+                            "lcv": "LarsCV Classifier",\n
+                            "tweedie": "TweedieClassifiers",\n
                             "all": "All Classifiers",\n
             params : dict
                         contains parameters for model
@@ -853,6 +863,16 @@ class Regression:
                             "lcv": "LassoCV Regressor",\n
                             "llic": "LassoLarsIC Regressor",\n
                             "llcv": "LassoLarsCV Regressor",\n
+                            "ransac": "RANSACRegressor",\n
+                            "ompcv": "OrthogonalMatchingPursuitCV",\n
+                            "gpr": "GaussianProcessRegressor",\n
+                            "omp": "OrthogonalMatchingPursuit",\n
+                            "llars": "LassoLars",\n
+                            "iso": "IsotonicRegression",\n
+                            "fm": "Factorisation Machine Regressors",\n
+                            "rnr": "Radius Neighbors Regressor Regressors",\n
+                            "qr": "Quantile Regression Regressors",\n
+                            "theil": "TheilSenRegressor Regressors",\n
                             "all": "All Regressors",\n
             params : dict
                         contains parameters for model

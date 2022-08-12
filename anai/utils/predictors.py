@@ -8,25 +8,36 @@ from anai.utils.tuner.optuna.objectives.regression_objectives import \
 from catboost import CatBoostClassifier, CatBoostRegressor
 from colorama import Fore
 from lightgbm import LGBMClassifier, LGBMRegressor
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import (AdaBoostClassifier, AdaBoostRegressor,
                               BaggingClassifier, BaggingRegressor,
                               ExtraTreesClassifier, ExtraTreesRegressor,
                               GradientBoostingClassifier,
                               GradientBoostingRegressor,
                               RandomForestClassifier, RandomForestRegressor)
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.isotonic import IsotonicRegression
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.linear_model import (BayesianRidge, ElasticNet, ElasticNetCV,
-                                  GammaRegressor, HuberRegressor, LassoCV,
-                                  LassoLarsCV, LassoLarsIC, LinearRegression,
+                                  GammaRegressor, HuberRegressor, Lars, LarsCV,
+                                  Lasso, LassoCV, LassoLars, LassoLarsCV,
+                                  LassoLarsIC, LinearRegression,
                                   LogisticRegression, LogisticRegressionCV,
+                                  OrthogonalMatchingPursuit,
+                                  OrthogonalMatchingPursuitCV,
                                   PassiveAggressiveClassifier, Perceptron,
-                                  PoissonRegressor, Ridge, RidgeClassifier,
-                                  SGDClassifier, SGDRegressor)
+                                  PoissonRegressor, QuantileRegressor,
+                                  RANSACRegressor, Ridge, RidgeClassifier,
+                                  SGDClassifier, SGDRegressor,
+                                  TheilSenRegressor)
 from sklearn.naive_bayes import GaussianNB
-from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.neighbors import (KNeighborsClassifier, KNeighborsRegressor,
+                               RadiusNeighborsClassifier,
+                               RadiusNeighborsRegressor)
 from sklearn.neural_network import MLPClassifier, MLPRegressor
 from sklearn.svm import SVC, SVR
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from tensorfm.sklearn import FactorizationMachineRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
 
@@ -246,6 +257,60 @@ def classification_predictor(
             classifier = LassoLarsCVClassifier(**params)
             objective_to_be_tuned = objective.llcv_classifier_objective
             params.pop("normalize")
+        elif predictor == "tweedie":
+            if mode == 'single':
+                print(Fore.YELLOW +
+                      "Training Tweedie Classifier on Training Set [*]\n")
+            classifier = TweedieClassifier(**params)
+            objective_to_be_tuned = None
+        elif predictor == "ransac":
+            if mode == 'single':
+                print(Fore.YELLOW +
+                      "Training RANSAC Classifier on Training Set [*]\n")
+            classifier = RANSACClassifier(**params)
+            objective_to_be_tuned = None
+        elif predictor == "ompcv":
+            if mode == 'single':
+                print(Fore.YELLOW +
+                      "Training OrthogonalMatchingPursuitCV Classifier on Training Set [*]\n")
+            params['normalize'] = False
+            classifier = OrthogonalMatchingPursuitCVClassifier(**params)
+            objective_to_be_tuned = None
+            params.pop("normalize")
+        elif predictor == "omp":
+            if mode == 'single':
+                print(Fore.YELLOW +
+                      "Training OrthogonalMatchingPursuit Classifier on Training Set [*]\n")
+            params['normalize'] = False
+            classifier = OrthogonalMatchingPursuitClassifier(**params)
+            objective_to_be_tuned = None
+            params.pop("normalize")
+        elif predictor == "iso":
+            if mode == 'single':
+                print(Fore.YELLOW +
+                      "Training Isotonic Classifier on Training Set [*]\n")
+            params['method'] = 'isotonic'
+            classifier = CalibratedClassifierCV(**params)
+            objective_to_be_tuned = None
+            params.pop("method")
+        elif predictor == "rad":
+            if mode == 'single':
+                print(Fore.YELLOW +
+                      "Training Radius Neighbors Classifier on Training Set [*]\n")
+            classifier = RadiusNeighborsClassifier(**params)
+            objective_to_be_tuned = None
+        elif predictor == "quantile":
+            if mode == 'single':
+                print(Fore.YELLOW +
+                      "Training Quantile Classifier on Training Set [*]\n")
+            classifier = QuantileClassifier(**params)
+            objective_to_be_tuned = None
+        elif predictor == "theil":
+            if mode == 'single':
+                print(Fore.YELLOW +
+                      "Training TheilSen Classifier on Training Set [*]\n")
+            classifier = TheilSenClassifier(**params)
+            objective_to_be_tuned = None
         return (classifier, objective_to_be_tuned)
     except Exception as error:
         print(traceback.format_exc())
@@ -482,6 +547,89 @@ def regression_predictor(
             objective_to_be_tuned = objective.llcv_regressor_objective
             params.pop("verbose")
             params.pop("n_jobs")
+        elif predictor == "ransac":
+            if mode == "single":
+                print(Fore.YELLOW +
+                      "Training RANSAC Regressor on Training Set [*]\n")
+            regressor = RANSACRegressor(**params)
+            objective_to_be_tuned = objective.ransac_regressor_objective
+        elif predictor == "ompcv":
+            if mode == "single":
+                print(Fore.YELLOW +
+                      "Training OrthogonalMatchingPursuitCV on Training Set [*]\n")
+            params["verbose"] = verbose
+            params["n_jobs"] = -1
+            params['normalize'] = False
+            regressor = OrthogonalMatchingPursuitCV(**params)
+            objective_to_be_tuned = objective.ompcv_regressor_objective
+            params.pop("verbose")
+            params.pop("n_jobs")
+            params.pop("normalize")
+        elif predictor == "gpr":
+            if mode == "single":
+                print(Fore.YELLOW +
+                      "Training Gaussian Process Regressor on Training Set [*]\n")
+            regressor = GaussianProcessRegressor(**params)
+            objective_to_be_tuned = objective.gpr_regressor_objective
+        elif predictor == "omp":
+            if mode == "single":
+                print(Fore.YELLOW +
+                      "Training OrthogonalMatchingPursuit on Training Set [*]\n")
+            params['normalize'] = False
+            regressor = OrthogonalMatchingPursuit(**params)
+            objective_to_be_tuned = objective.omp_regressor_objective
+            params.pop("normalize")
+        elif predictor == "llars":
+            if mode == "single":
+                print(Fore.YELLOW +
+                      "Training LassoLars on Training Set [*]\n")
+            params["verbose"] = verbose
+            params['normalize'] = False
+            regressor = LassoLars(**params)
+            objective_to_be_tuned = objective.llars_regressor_objective
+            params.pop("verbose")
+            params.pop("normalize")
+        elif predictor == "iso":
+            if mode == "single":
+                print(Fore.YELLOW +
+                      "Training Isotonic regression on Training Set [*]\n")
+            regressor = IsotonicRegression(**params)
+            objective_to_be_tuned = None
+        elif predictor == "fm":
+            if mode == "single":
+                print(Fore.YELLOW +
+                      "Training Factorization Machine regression on Training Set [*]\n")
+            params["random_state"] = random_state
+            regressor = FactorizationMachineRegressor(**params)
+            objective_to_be_tuned = None
+            params.pop("random_state")
+        elif predictor == "rnr":
+            if mode == "single":
+                print(Fore.YELLOW +
+                      "Training Radius Neighbors Regressor on Training Set [*]\n")
+            params["n_jobs"] = -1
+            regressor = RadiusNeighborsRegressor(**params)
+            objective_to_be_tuned = None
+            params.pop("n_jobs")
+        elif predictor == "qr":
+            if mode == "single":
+                print(Fore.YELLOW +
+                      "Training Quantile Regressor on Training Set [*]\n")
+            regressor = QuantileRegressor(**params)
+            objective_to_be_tuned = None
+        elif predictor == "theil":
+            if mode == "single":
+                print(Fore.YELLOW +
+                      "Training Theil-Sen Regressor on Training Set [*]\n")
+            params["verbose"] = verbose
+            params["n_jobs"] = -1
+            params["random_state"] = random_state
+            regressor = TheilSenRegressor(**params)
+            objective_to_be_tuned = None
+            params.pop("verbose")
+            params.pop("n_jobs")
+            params.pop("random_state")
+
         return (regressor, objective_to_be_tuned)
     except Exception as error:
         print(traceback.format_exc())

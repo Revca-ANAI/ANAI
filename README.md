@@ -53,6 +53,16 @@ Our Goal is to democratize Machine Learning and make it accessible to everyone.
         - "lcv": "LassoCV Classifier"
         - "llic": "LassoLarsIC Classifier"
         - "llcv": "LassoLarsCV Classifier"
+        - "ransac": "RANSACClassifiers",
+        - "ompcv": "OrthogonalMatchingPursuitCV Classifier",
+        - "omp": "OrthogonalMatchingPursuit Classifier",
+        - "iso": "IsotonicRegression Classifier",
+        - "rad": "RadiusNeighbors Classifier",
+        - "quantile": "QuantileRegression Classifier",
+        - "theil": "TheilSenRegressor Classifier",
+        - "lars": "Lars Classifeir",
+        - "lcv": "LarsCV Classifier",
+        - "tweedie": "TweedieClassifiers",
         - "all": "All Classifiers"
 
 2) Regression
@@ -84,6 +94,16 @@ Our Goal is to democratize Machine Learning and make it accessible to everyone.
         - "lcv": "LassoCV Regressor"
         - "llic": "LassoLarsIC Regressor"
         - "llcv": "LassoLarsCV Regressor"
+        - "ransac": "RANSACRegressor",
+        - "ompcv": "OrthogonalMatchingPursuitCV",
+        - "gpr": "GaussianProcessRegressor",
+        - "omp": "OrthogonalMatchingPursuit",
+        - "llars": "LassoLars",
+        - "iso": "IsotonicRegression",
+        - "fm": "Factorisation Machine Regressors",
+        - "rnr": "Radius Neighbors Regressor Regressors",
+        - "qr": "Quantile Regression Regressors",
+        - "theil": "TheilSenRegressor Regressors",
         - "all": "All Regressors"
 
 ### Usage Example
