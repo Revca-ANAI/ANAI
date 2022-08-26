@@ -32,6 +32,7 @@ setup(
     keywords=["ANAI", "AutoML", "Python"],
     install_requires=[
         open("requirements.txt", "r").read().splitlines(),
+        'tensorfm @ https://anai-wheels.s3.ap-south-1.amazonaws.com/TensorFM-1.0.4-py3-none-any.whl',
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",
