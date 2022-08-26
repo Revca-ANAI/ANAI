@@ -37,7 +37,6 @@ from sklearn.neighbors import (KNeighborsClassifier, KNeighborsRegressor,
 from sklearn.neural_network import MLPClassifier, MLPRegressor
 from sklearn.svm import SVC, SVR
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
-from tensorfm.sklearn import FactorizationMachineRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
 
@@ -595,14 +594,6 @@ def regression_predictor(
                       "Training Isotonic regression on Training Set [*]\n")
             regressor = IsotonicRegression(**params)
             objective_to_be_tuned = None
-        elif predictor == "fm":
-            if mode == "single":
-                print(Fore.YELLOW +
-                      "Training Factorization Machine regression on Training Set [*]\n")
-            params["random_state"] = random_state
-            regressor = FactorizationMachineRegressor(**params)
-            objective_to_be_tuned = None
-            params.pop("random_state")
         elif predictor == "rnr":
             if mode == "single":
                 print(Fore.YELLOW +
