@@ -869,7 +869,6 @@ class Regression:
                             "omp": "OrthogonalMatchingPursuit",\n
                             "llars": "LassoLars",\n
                             "iso": "IsotonicRegression",\n
-                            "fm": "Factorisation Machine Regressors",\n
                             "rnr": "Radius Neighbors Regressor Regressors",\n
                             "qr": "Quantile Regression Regressors",\n
                             "theil": "TheilSenRegressor Regressors",\n

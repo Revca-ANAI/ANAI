@@ -100,7 +100,6 @@ Our Goal is to democratize Machine Learning and make it accessible to everyone.
         - "omp": "OrthogonalMatchingPursuit",
         - "llars": "LassoLars",
         - "iso": "IsotonicRegression",
-        - "fm": "Factorisation Machine Regressors",
         - "rnr": "Radius Neighbors Regressor Regressors",
         - "qr": "Quantile Regression Regressors",
         - "theil": "TheilSenRegressor Regressors",

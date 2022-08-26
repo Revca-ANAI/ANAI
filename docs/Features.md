@@ -274,7 +274,6 @@ As you can see, SHAP explainer failed to explain the model. So it switched to Su
     - "omp": "OrthogonalMatchingPursuit",
     - "llars": "LassoLars",
     - "iso": "IsotonicRegression",
-    - "fm": "Factorisation Machine Regressors",
     - "rnr": "Radius Neighbors Regressor Regressors",
     - "qr": "Quantile Regression Regressors",
     - "theil": "TheilSenRegressor Regressors",
