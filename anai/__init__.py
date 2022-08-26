@@ -149,7 +149,7 @@ def run(
         if not suppress_task_detection:
             print(
                 Fore.YELLOW
-                + "ANAITaskWarning: Task is getting detected automatically. To suppress this behaviour, set suppress_task_detection=True and specify task with task argument",
+                + "ANAITaskWarning: Task is getting detected automatically. To suppress this behaviour, set suppress_task_detection=True and specify task with task=<regression or classification> argument",
                 Fore.RESET,
             )
         else:
