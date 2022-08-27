@@ -36,7 +36,6 @@ from sklearn.linear_model import (
     SGDRegressor,
     TweedieRegressor,
 )
-from sklearn.linear_model._glm import GeneralizedLinearRegressor
 from sklearn.model_selection import cross_val_score
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.neural_network import MLPRegressor

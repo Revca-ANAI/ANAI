@@ -30,6 +30,7 @@ def run(
     df=None,
     target: str = None,
     filepath: str = None,
+    df_kwargs: dict = {},
     config: bool = False,
     except_columns: list = [],
     predictor: list = [],
@@ -64,6 +65,10 @@ def run(
                 DataFrame to be used for modelling.
             target : str
                 Target Column Name 
+            filepath : str
+                Filepath of the dataframe to be loaded.
+            df_kwargs : dict
+                Keyword arguments for the dataframe loading function. Only used if filepath is not None.
             except_columns : list, optional
                 List of Columns to be excluded from the dataset
             predictor : list
@@ -137,6 +142,7 @@ def run(
             
             ai = anai.run(
                         filepath='examples/Folds5x2_pp.xlsx', 
+                        df_kwargs={'sheet_name': 'Sheet1'},
                         target='PE',
                         predictor=['lin'],
             )
@@ -166,7 +172,7 @@ def run(
                 raise FileNotFoundError("ANAI Config File Not Found")
         if df is None:
             if filepath is not None:
-                df = df_loader(filepath, suppress=True)
+                df = df_loader(filepath, suppress=True, **df_kwargs)
             else:
                 raise ValueError("Please provide a dataframe or a filepath")
         if __task(df, target) and not suppress_task_detection or task == "regression":
@@ -182,6 +188,7 @@ def run(
                 df=df,
                 target=target,
                 filepath=filepath,
+                df_kwargs=df_kwargs,
                 config=config,
                 except_columns=except_columns,
                 predictor=predictor,
@@ -206,6 +213,7 @@ def run(
                 metric=metric,
                 ensemble=ensemble,
             )
+            regressor.fit()
             return regressor
         elif (
             not __task(df, target)
@@ -224,6 +232,7 @@ def run(
                 df=df,
                 target=target,
                 filepath=filepath,
+                df_kwargs=df_kwargs,
                 config=config,
                 except_columns=except_columns,
                 predictor=predictor,
@@ -243,6 +252,7 @@ def run(
                 ensemble=ensemble,
                 exclude_models=exclude_models,
             )
+            classifier.fit()
             return classifier
     except KeyboardInterrupt:
         if os.path.exists(os.getcwd() + "/dask-worker-space"):
@@ -283,11 +293,12 @@ def __task(df, target):
         return False
 
 
-def load(df_filepath):
+def load(df_filepath, **df_kwargs):
     """Loads a dataframe from a filepath.
 
     Args:
         df_filepath (str): Filepath of the dataframe to be loaded.
+        df_kwargs (dict): Keyword arguments to be passed to df_loader function.
 
     Returns:
         pd.DataFrame : Loaded dataframe.
@@ -296,12 +307,12 @@ def load(df_filepath):
     
     suppress = False
     if type(df_filepath) is str:
-        df = __df_loader_single(df_filepath, suppress=False)
+        df = __df_loader_single(df_filepath, suppress=False, **df_kwargs)
     elif type(df_filepath) is list:
         print(Fore.YELLOW + "Loading Data [*]\n")
         df = pd.concat(
             [
-                __df_loader_single(df_filepath[i], suppress=True)
+                __df_loader_single(df_filepath[i], suppress=True, **df_kwargs)
                 for i in range(len(df_filepath))
             ]
         )

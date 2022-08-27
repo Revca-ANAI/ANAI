@@ -18,6 +18,7 @@ class Explainer:
         self.isReg = None
         self.columns = None
         self.y_test = None
+        self.show_graph = None
 
     def set_params(
         self,
@@ -30,6 +31,7 @@ class Explainer:
         fit_params={},
         isReg=True,
         columns=None,
+        show_graph=True,
     ):
         self.features = features
         self.X_train = X_train
@@ -40,16 +42,18 @@ class Explainer:
         self.fit_params = fit_params
         self.isReg = isReg
         self.columns = columns
-
+        self.show_graph = show_graph
+        
     def permutation(self, model):
         try:
-            permutational_feature_importance(
-                self.features.columns, self.X_train, self.y_train, model, self.isReg
+            res = permutational_feature_importance(
+                self.features.columns, self.X_train, self.y_train, model, self.isReg, self.show_graph
             )
+            return res
         except Exception as e:
             print(Fore.YELLOW + "Automatically switching to Surrogate mode\n")
             try:
-                permutational_feature_importance(
+                res = permutational_feature_importance(
                     self.features.columns,
                     self.X_train,
                     self.y_train,
@@ -57,7 +61,9 @@ class Explainer:
                         model, self.X_train, self.y_train, isReg=self.isReg
                     ),
                     self.isReg,
+                    self.show_graph,
                 )
+                return res
             except Exception as e:
                 print(e)
                 print(traceback.format_exc())
@@ -66,15 +72,17 @@ class Explainer:
 
     def shap(self, model):
         try:
-            shap_feature_importance(self.features.columns, self.X_train, model)
+            res = shap_feature_importance(self.features.columns, self.X_train, model, self.isReg, self.show_graph)
+            return res
         except Exception as e:
             print(Fore.YELLOW + "Automatically switching to Surrogate mode\n")
             try:
-                shap_feature_importance(
+                res = shap_feature_importance(
                     self.features.columns,
                     self.X_train,
-                    surrogate_decision_tree(model, self.X_train, isReg=self.isReg),
+                    surrogate_decision_tree(model, self.X_train, isReg=self.isReg, show_graph=self.show_graph),
                 )
+                return res
             except Exception as e:
                 print(e)
                 print(traceback.format_exc())

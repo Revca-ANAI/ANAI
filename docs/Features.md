@@ -10,7 +10,7 @@
 ### Initialization
     import anai
     from anai.preprocessing import Preprocessor
-    df = anai.load("data/bodyPerformance.csv")
+    df = anai.load("data/bodyPerformance.csv", df_kwargs={"header": None})
     prep = Preprocessor(dataset=df, target="class", except_columns=['weight_kg'])
 
 ### Available Preprocessing Methods
@@ -89,6 +89,10 @@
 ### Arguments
     df : Pandas DataFrame
         DataFrame to be used for modelling.
+    filepath : str
+        Filepath of the dataframe to be loaded.
+    df_kwargs : dict
+        Keyword arguments for the dataframe loading function. Only used if filepath is not None.
     target : str
         Target Column Name 
     except_columns : list, optional

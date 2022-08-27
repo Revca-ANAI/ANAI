@@ -22,6 +22,10 @@ ANAI is an Automated Machine Learning Python Library that works with tabular dat
         DataFrame to be used for modelling.
     target : str
         Target Column Name 
+    filepath : str
+        Filepath of the dataframe to be loaded.
+    df_kwargs : dict
+        Keyword arguments for the dataframe loading function. Only used if filepath is not None.
     except_columns : list, optional
         List of Columns to be excluded from the dataset
     predictor : list

@@ -5,12 +5,16 @@
 ### Initialization
 
     import anai
-    ai = anai.run(filepath="data/iris.csv", target="class", predictor="lr")
+    ai = anai.run(filepath="data/iris.csv", df_kwargs={"header": None}, target="class", predictor="lr")
 
 ### Arguments
 
         df : Pandas DataFrame
             DataFrame to be used for modelling.
+        filepath : str
+            Filepath of the dataframe to be loaded.
+        df_kwargs : dict
+            Keyword arguments for the dataframe loading function. Only used if filepath is not None.
         target : str
             Target Column Name 
         except_columns : list, optional

@@ -10,7 +10,7 @@ google-cloud-bigquery
 google-cloud-bigquery-storage
 h11
 imbalanced-learn
-lightgbm
+lightgbm; platform_system=="Linux" or platform_system=="Windows"
 matplotlib
 matplotlib-inline
 networkx

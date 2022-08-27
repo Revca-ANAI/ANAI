@@ -39,6 +39,7 @@ class Classification:
         df=None,
         target: str = None,
         filepath: str = None,
+        df_kwargs: dict = {},
         config: bool = False,
         except_columns: list = [],
         predictor: list =["lr"],
@@ -68,11 +69,16 @@ class Classification:
 
         Parameters:
 
-            features : array
-                        features array
-            lables : array
-                        labels array
-            except_columns (list): [List of Columns to be excluded from the dataset]
+            df : Pandas DataFrame
+                DataFrame to be used for modelling.
+            target : str
+                Target Column Name 
+            filepath : str
+                Filepath of the dataframe to be loaded.
+            df_kwargs : dict
+                Keyword arguments for the dataframe loading function. Only used if filepath is not None.
+            except_columns : list, optional
+                List of Columns to be excluded from the dataset
             predictor : list
                         Predicting model to be used
                         Default ['lr']  - Logistic Regression\n
@@ -116,7 +122,7 @@ class Classification:
             params : dict
                         contains parameters for model
             tune : boolean
-                    when True Applies GridSearch CrossValidation
+                    when True Applies Optuna to find best parameters for model
                     Default is False
             test_size: float or int, default=.2
                         If float, should be between 0.0 and 1.0 and represent
@@ -125,21 +131,18 @@ class Classification:
                         If int, represents the absolute number of test samples.
             cv_folds : int
                     No. of cross validation folds. Default = 10
-            pca : str
-                if 'y' will apply PCA on Train and Validation set. Default = 'n'
+            pca : bool
+                if True will apply PCA on Train and Validation set. Default = False
             lda : str
-                if 'y' will apply LDA on Train and Validation set. Default = 'n'
+                if True will apply LDA on Train and Validation set. Default = False
             pca_kernel : str
                     Kernel to be use in PCA. Default = 'linear'
             n_components_lda : int
                     No. of components for LDA. Default = 1
             n_components_pca : int
                     No. of components for PCA. Default = 2
-            loss : str
-                    loss method for ann. Default = 'binary_crossentropy'
-                    rate for dropout layer. Default = 0
-            smote : str,
-                Whether to apply SMOTE. Default = 'y'
+            smote : Bool,
+                Whether to apply SMOTE. Default = True
             k_neighbors : int
                 No. of neighbors for SMOTE. Default = 1
             verbose : boolean
@@ -160,12 +163,8 @@ class Classification:
                     minimize : Minimize
             optuna_n_trials : int
                 No. of trials for optuna. Default = 100
-            optuna_metric: str
-                Metric to be used in optuna. Default = 'R^2'
-            lgbm_objective : str
-                Objective for lgbm classifier. Default = 'binary'
             ensemble : boolean
-                Whether to use ensemble. Default = True
+                Whether to use ensemble methods. Default = True
 
         Returns:
 
@@ -178,6 +177,7 @@ class Classification:
             import anai
             ai = anai.run(
                         filepath='examples/test_data.csv', 
+                        df_kwargs={'index_col':'id'},
                         target='PE',
                         predictor=['lr'],
             )
@@ -196,7 +196,7 @@ class Classification:
                 raise FileNotFoundError("ANAI Config File Not Found")
         if df is None:
             if filepath is not None:
-                df = df_loader(filepath)
+                df = df_loader(filepath, **df)
             else:
                 raise ValueError("Please provide a dataframe or a filepath")
         if type(predictor) == list:
@@ -295,9 +295,8 @@ class Classification:
         self.dimension_handler = DimensionHandler()
         self.encoder = None
         self.le_encoder = None
-        self.__fit()
 
-    def __fit(self):
+    def fit(self):
         """[Takes Features and Labels and Encodes Categorical Data then Applies SMOTE , Splits the features and labels in training and validation sets with test_size = .2
         scales X_train, self.X_val using StandardScaler.
         Fits every model on training set and predicts results,
@@ -760,9 +759,21 @@ class Classification:
         else:
             raise ValueError("No path specified.Please provide actual path\n")
 
-    def explain(self, method):
+    def explain(self, method, show_graph=True):
         """
-        Returns the importance features of the dataset
+        Explains the model using the specified method.
+        
+        args:
+            method (str): [Method to use for explaining the model]
+                Available methods:
+                    - shap
+                    - perm
+
+            show_graph (bool): [Whether to show the graph or not]
+            
+        returns:
+            [DataFrame] : [Explained DataFrame]
+        
         """
         columns = self.features.columns
         self.explainer.set_params(
@@ -775,6 +786,7 @@ class Classification:
             self.fit_params,
             False,
             columns,
+            show_graph,
         )
         if self.pred_mode == "all":
             classifier = copy.deepcopy(self.best_classifier.model)
@@ -804,6 +816,7 @@ class Regression:
         df=None,
         target: str = None,
         filepath: str = None,
+        df_kwargs: dict = {},
         config: bool = False,
         except_columns: list = [],
         predictor: list = ["lin"],
@@ -833,6 +846,10 @@ class Regression:
         Parameters:
             df (dataframe): [Dataset containing features and target]
             target (str): [Target Column Name]
+            filepath : str
+                Filepath of the dataframe to be loaded.
+            df_kwargs : dict
+                Keyword arguments for the dataframe loading function. Only used if filepath is not None.
             except_columns (list): [List of Columns to be excluded from the dataset]
             predictor : list
                         Predicting models to be used
@@ -931,6 +948,7 @@ class Regression:
             
             ai = anai.run(
                         filepath='examples/Folds5x2_pp.xlsx', 
+                        df_kwargs={'sheet_name': 'Sheet1'},
                         target='PE',
                         predictor=['lin'],
             )
@@ -949,7 +967,7 @@ class Regression:
                 raise FileNotFoundError("ANAI Config File Not Found")
         if df is None:
             if filepath is not None:
-                df = df_loader(filepath)
+                df = df_loader(filepath, **df_kwargs)
             # elif config_filepath is not None:
             #     df, target = load_data_from_config(config_filepath)
             else:
@@ -1048,9 +1066,8 @@ class Regression:
         self.encoder = None
         self.features = None
         self.labels = None
-        self.__fit()
 
-    def __fit(self):
+    def fit(self):
         """[Takes Features and Labels and Encodes Categorical Data then Applies SMOTE , Splits the features and labels in training and validation sets with test_size = .2
         scales X_train, X_val using StandardScaler.
         Fits model on training set and predicts results, Finds R^2 Scoreand mean square error
@@ -1573,9 +1590,21 @@ class Regression:
         else:
             raise ValueError("No path specified.Please provide actual path\n")
 
-    def explain(self, method):
+    def explain(self, method, show_graph=True):
         """
-        Returns the importance features of the dataset
+        Explains the model using the specified method.
+        
+        args:
+            method (str): [Method to use for explaining the model]
+                Available methods:
+                    - shap
+                    - perm
+
+            show_graph (bool): [Whether to show the graph or not]
+            
+        returns:
+            [DataFrame] : [Explained DataFrame]
+        
         """
         self.explainer.set_params(
             self.features,
@@ -1585,6 +1614,7 @@ class Regression:
             self.y_val,
             self.cv_folds,
             self.fit_params,
+            self.show_graph,
         )
         if self.pred_mode == "all":
             regressor = copy.deepcopy(self.best_regressor.model)
@@ -1595,14 +1625,12 @@ class Regression:
             )
             print(Fore.YELLOW + "Explaining ANAI [*]\n")
 
-        if self.original_predictor == "all":
-            raise TypeError(
-                "[Error] This method is only applicable on single predictor"
-            )
-        elif method == "perm":
-            self.explainer.permutation(model=regressor)
+        if method == "perm":
+            res = self.explainer.permutation(model=regressor)
+            return res
         elif method == "shap":
-            self.explainer.shap(model=regressor)
+            res = self.explainer.shap(model=regressor)
+            return res
         else:
             raise NotImplementedError(
                 "Technique not implemented. Please choose from perm, shap"
