@@ -293,11 +293,14 @@ def __task(df, target):
         return False
 
 
-def load(df_filepath, **df_kwargs):
+def load(df_filepath, legacy =False, **df_kwargs):
     """Loads a dataframe from a filepath.
 
     Args:
         df_filepath (str): Filepath of the dataframe to be loaded.
+        legacy (bool, optional): If True, loads the dataframe using pandas.read_csv. 
+            If False, loads the dataframe using modin.pandas.read_csv. 
+            Defaults to False.
         df_kwargs (dict): Keyword arguments to be passed to df_loader function.
 
     Returns:
@@ -307,12 +310,13 @@ def load(df_filepath, **df_kwargs):
     
     suppress = False
     if type(df_filepath) is str:
-        df = __df_loader_single(df_filepath, suppress=False, **df_kwargs)
+        df = __df_loader_single(df_filepath, suppress=False, legacy = legacy, **df_kwargs)
     elif type(df_filepath) is list:
         print(Fore.YELLOW + "Loading Data [*]\n")
         df = pd.concat(
             [
-                __df_loader_single(df_filepath[i], suppress=True, **df_kwargs)
+                __df_loader_single(
+                    df_filepath[i], suppress=True, legacy=legacy, **df_kwargs)
                 for i in range(len(df_filepath))
             ]
         )

@@ -1,5 +1,4 @@
 import numpy as np
-import modin.pandas as pd
 from scipy.stats import shapiro
 from dateutil.parser import parse
 from fuzzywuzzy import fuzz
@@ -31,40 +30,54 @@ def is_date(string, fuzzy=False):
         return True
     except ValueError:
         return False
+    except OverflowError:
+        return False
+    except Exception as e:
+        return False
 
 
 def dtype(df, col):
-    if df[col].dtype == "O":
-        if not is_date(df[col].iloc[0]):
-            return "Categorical"
-        elif is_date(df[col].iloc[0]):
-            return "Time Series"
-    elif df[col].dtype == "int64" or df[col].dtype == "float64":
-        return "Numeric"
-    else:
+    try:
+        if df[col].dtype == "O":
+            if not is_date(df[col].iloc[0]):
+                return "Categorical"
+            elif is_date(df[col].iloc[0]):
+                return "Time Series"
+        elif df[col].dtype == "int64" or df[col].dtype == "float64":
+            return "Numeric"
+        else:
+            return "Unknown"
+    except:
         return "Unknown"
 
 
 def dtype_ver(df, col):
-    if df[col].dtype == "O":
-        if not is_date(df[col].iloc[0]):
-            return "Categorical", ""
-        elif is_date(df[col].iloc[0]):
-            return "Categorical", "Time Series"
-    elif df[col].dtype == "int64" or df[col].dtype == "float64":
-        return "Numeric", ""
-    else:
+    try:
+        if df[col].dtype == "O":
+            if not is_date(df[col].iloc[0]):
+                return "Categorical", ""
+            elif is_date(df[col].iloc[0]):
+                return "Categorical", "Time Series"
+        elif df[col].dtype == "int64" or df[col].dtype == "float64":
+            return "Numeric", ""
+        else:
+            return "Unknown", ""
+    except Exception as e:
         return "Unknown", ""
+
 
 def shap(df, col):
     return "{:0.2f}".format(
         float(shapiro(df[col])[0]) if df[col].dtype != "O" else "NA"
     )
 
+
 def most_frequent_values(df, col):
     return (
-        df[col].value_counts()[:1].index.tolist()[0] if df[col].dtype == "O" else "NA"
+        df[col].value_counts()[:1].index.tolist()[
+            0] if df[col].dtype == "O" else "NA"
     )
+
 
 def column_stats_summary(df, col):
     if "identi" in col.lower():
@@ -159,7 +172,8 @@ def column_stats_summary(df, col):
 
 def data_stats_summary(df):
     anom = AnomalyDetector()
-    df2 = df.fillna(df.mean())
+    df2 = df.dropna(axis=1, how='all')
+    df2 = df2.fillna(df2.mean())
     X = []
     for i in df2.columns:
         if dtype_ver(df2, i)[0] == "Numeric":

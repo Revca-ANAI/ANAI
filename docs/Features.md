@@ -13,6 +13,11 @@
     df = anai.load("data/bodyPerformance.csv", df_kwargs={"header": None})
     prep = Preprocessor(dataset=df, target="class", except_columns=['weight_kg'])
 
+### Data Loading
+    Load data from a file
+    df = anai.load("data/bodyPerformance.csv", df_kwargs={"header": None}, legacy=False)
+    Returns a pandas dataframe
+
 ### Available Preprocessing Methods
 #### Data Summary
   Gives a summary of the data.

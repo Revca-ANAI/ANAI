@@ -8,9 +8,9 @@ def __df_loader_single(
     obj=None,
     objfilepath=None,
     suppress=False,
-    df_kwargs = {}
+    legacy=False,
+    **df_kwargs
 ):
-    kwargs = df_kwargs
     df = None
     flag = 0
     if obj is None:
@@ -62,17 +62,17 @@ def __df_loader_single(
             print(
                 Fore.RED + "Data Loading Failed [", "\u2717", "]\n"
             ) if not suppress else None
-    return df
+    return df._to_pandas() if legacy else df
 
 
-def df_loader(df_filepath, obj=None, objfilepath=None, suppress=False, df_kwargs={}):
+def df_loader(df_filepath, obj=None, objfilepath=None, suppress=False, df_kwargs={}, legacy=False):
     if type(df_filepath) is str:
-        df = __df_loader_single(df_filepath, obj, objfilepath, suppress, **df_kwargs)
+        df = __df_loader_single(df_filepath, obj, objfilepath, suppress, legacy, **df_kwargs)
     elif type(df_filepath) is list:
         print(Fore.YELLOW + "Loading Data [*]\n")
         df = pd.concat(
             [
-                __df_loader_single(df_filepath[i], obj, objfilepath, True, **df_kwargs)
+                __df_loader_single(df_filepath[i], obj, objfilepath, True,legacy,  **df_kwargs)
                 for i in range(len(df_filepath))
             ]
         )

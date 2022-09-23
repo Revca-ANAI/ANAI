@@ -7,7 +7,7 @@ from collections import Counter
 import category_encoders as ce
 import matplotlib.pyplot as plt
 import modin
-import modin.pandas as pd
+import pandas as pd
 import numpy as np
 import seaborn as sns
 from anai.preprocessing import *
@@ -28,7 +28,7 @@ class Preprocessor:
     def __init__(
         self,
         dataset,
-        target: str,
+        target: str = None,
         except_columns: list = [],
     ):
         """ Initialize the Preprocessor class.
@@ -56,8 +56,9 @@ class Preprocessor:
 
         self.encoder = Encoder()
         self.scaler = Scaler()
-        self.features = self.__dataset.drop(self.target, axis=1)
-        self.labels = self.__dataset[self.target]
+        if self.target:
+            self.features = self.__dataset.drop(self.target, axis=1)
+            self.labels = self.__dataset[self.target]
 
     def prepare(self, features, labels, test_size, random_state, smote, k_neighbors):
         """
