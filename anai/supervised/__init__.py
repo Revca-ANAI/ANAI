@@ -1614,7 +1614,7 @@ class Regression:
             self.y_val,
             self.cv_folds,
             self.fit_params,
-            self.show_graph,
+            show_graph,
         )
         if self.pred_mode == "all":
             regressor = copy.deepcopy(self.best_regressor.model)

@@ -6,7 +6,13 @@ import inspect
 import os
 import shutil
 import warnings
-
+from distributed import Client, LocalCluster
+try:
+    clust = LocalCluster(name='ANAI-Cluster', n_workers=2, threads_per_worker=2, processes=True,
+                        host='0.0.0.0', protocol='tcp://', scheduler_port=0, dashboard_address=0)
+    client = Client(clust)
+except Exception as e:
+    pass
 import modin.pandas as pd
 from colorama import Fore
 from optuna.samplers._tpe.sampler import TPESampler
@@ -16,7 +22,6 @@ from anai.supervised import Classification, Regression
 from anai.utils.connectors import load_data_from_config
 from anai.utils.connectors.data_handler import __df_loader_single, df_loader
 
-os.environ["MODIN_ENGINE"] = "dask"
 
 
 if os.path.exists(os.getcwd() + "/dask-worker-space"):

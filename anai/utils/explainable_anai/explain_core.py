@@ -72,15 +72,16 @@ class Explainer:
 
     def shap(self, model):
         try:
-            res = shap_feature_importance(self.features.columns, self.X_train, model, self.isReg, self.show_graph)
+            res = shap_feature_importance(self.features.columns, self.X_train, model, self.show_graph)
             return res
         except Exception as e:
             print(Fore.YELLOW + "Automatically switching to Surrogate mode\n")
             try:
                 res = shap_feature_importance(
-                    self.features.columns,
+                    self.features.columns, 
                     self.X_train,
-                    surrogate_decision_tree(model, self.X_train, isReg=self.isReg, show_graph=self.show_graph),
+                    surrogate_decision_tree(model, self.X_train), 
+                    show_graph=self.show_graph
                 )
                 return res
             except Exception as e:
