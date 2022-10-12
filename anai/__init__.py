@@ -13,6 +13,7 @@ try:
     client = Client(clust)
 except Exception as e:
     pass
+os.environ["MODIN_ENGINE"] = "dask"
 import modin.pandas as pd
 from colorama import Fore
 from optuna.samplers._tpe.sampler import TPESampler
